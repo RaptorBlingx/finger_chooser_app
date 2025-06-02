@@ -19,7 +19,13 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
 
   Timer? _countdownTimer;
   final Random _random = Random();
-  final DareService _dareService = DareService(); // Instantiate DareService
+  final DareService _dareService = DareService();
+
+  // Method to set custom dares
+  void setCustomDares(List<String> dares) {
+    if (!mounted) return;
+    state = state.copyWith(customDares: dares);
+  }
 
   Color _getRandomColor() {
     return Color.fromARGB(
@@ -117,7 +123,7 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
       state = state.copyWith(gamePhase: GamePhase.waitingForFingers);
       return;
     }
-    HapticFeedback.mediumImpact();
+    HapticFeedback.heavyImpact(); // Changed from medium to heavy
 
     final randomIndex = _random.nextInt(state.activeFingers.length);
     final winnerFinger = state.activeFingers[randomIndex];
@@ -129,22 +135,33 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
     // For now, let's keep it simple: always try to get a dare.
     
     try {
-      // TODO: When Custom Play wizard exists, construct FilterCriteria based on user choices.
-      // For now, no criteria are passed, so all dares are considered.
-      // Example of how you might use criteria later:
-      // final criteria = FilterCriteria(playerCount: state.activeFingers.length, genders: ["mixed"]);
-      // selectedDare = await _dareService.getRandomDare(criteria: criteria);
-      
-      selectedDare = await _dareService.getRandomDare(); // No criteria for now
-
+      if (state.customDares != null && state.customDares!.isNotEmpty) {
+        // Use custom dare
+        final randomDareText = state.customDares![_random.nextInt(state.customDares!.length)];
+        // Assuming Dare model can be created with just text, or adjust as needed
+        // If Dare needs an ID or other fields, those might need to be mocked or handled.
+        // For simplicity, creating a Dare object with the text.
+        // The ID 'custom' is arbitrary. Category might also be 'custom'.
+        selectedDare = Dare(id: 'custom_${_random.nextInt(10000)}', text: randomDareText, category: 'Custom');
+      } else {
+        // Use DareService for default dares
+        // TODO: When Custom Play wizard exists, construct FilterCriteria based on user choices.
+        // For now, no criteria are passed, so all dares are considered.
+        // Example of how you might use criteria later:
+        // final criteria = FilterCriteria(playerCount: state.activeFingers.length, genders: ["mixed"]);
+        // selectedDare = await _dareService.getRandomDare(criteria: criteria);
+        selectedDare = await _dareService.getRandomDare(); // No criteria for now
+      }
     } catch (e) {
       print("Error selecting dare: $e");
+      // Optionally set a default/error dare or handle error state
+      selectedDare = const Dare(id: 'error', text: 'Oops! Could not load a dare.', category: 'Error');
     }
     
     if (!mounted) return; 
     state = state.copyWith(
       selectedFinger: winnerFinger,
-      selectedDare: selectedDare, 
+      selectedDare: selectedDare,
       gamePhase: GamePhase.selectionComplete,
     );
   }
@@ -159,7 +176,7 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
       countdownSecondsRemaining: kCountdownSeconds, 
       clearSelectedFinger: true,
     );
-    HapticFeedback.heavyImpact(); 
+    HapticFeedback.lightImpact(); // Changed from heavy to light
     _cancelCountdown();
     state = state.copyWith(
       gamePhase: GamePhase.falseStart,
@@ -177,11 +194,13 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
   void resetGame() {
     if (!mounted) return;
     _cancelCountdown();
+    // Ensure customDares are also reset
     state = const ChooserScreenState(
-        canStartCountdown: false, 
-        countdownSecondsRemaining: kCountdownSeconds
+        canStartCountdown: false,
+        countdownSecondsRemaining: kCountdownSeconds,
+        customDares: null // Explicitly clear custom dares
         // selectedFinger and selectedDare will be null by default constructor
-    ); 
+    );
   }
 
 

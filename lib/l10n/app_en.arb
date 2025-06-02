@@ -7,5 +7,103 @@
   "placeFingersPrompt": "Place fingers on the screen!",
   "selectButton": "Select One",
   "settings": "Settings",
-  "manageDares": "Manage Dares"
+  "manageDares": "Manage Dares",
+
+  "customPlayWizardTitle": "Custom Play Wizard",
+  "dareListsTitle": "Dare Lists",
+  "enterNewListNameHint": "Enter new list name",
+  "createListButton": "Create List",
+  "listAlreadyExistsError": "List \"{listName}\" already exists.",
+  "@listAlreadyExistsError": {
+    "description": "Error message when a dare list with the same name already exists.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "My Dares"
+      }
+    }
+  },
+  "listCreatedSuccess": "List \"{listName}\" created.",
+  "@listCreatedSuccess": {
+    "description": "Success message when a dare list is created.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "My Dares"
+      }
+    }
+  },
+  "selectAListHint": "Select a list",
+  "deleteSelectedListTooltip": "Delete Selected List",
+  "noCustomDareListsMessage": "No custom dare lists created yet.",
+  "daresInListTitle": "Dares in \"{listName}\"",
+  "@daresInListTitle": {
+    "description": "Title for the section showing dares in a specific list.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "My Dares"
+      }
+    }
+  },
+  "enterNewDareHint": "Enter a new dare",
+  "addDareButton": "Add Dare",
+  "noDaresInListMessage": "No dares added to this list yet. Add some!",
+  "editDareTitle": "Edit Dare",
+  "editDareHint": "Edit the dare",
+  "cancelButton": "Cancel",
+  "saveButton": "Save",
+  "deleteDareTooltip": "Delete Dare",
+  "deleteListDialogTitle": "Delete List \"{listName}\"",
+  "@deleteListDialogTitle": {
+    "description": "Title for the delete list confirmation dialog.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "My Dares"
+      }
+    }
+  },
+  "deleteListDialogContent": "Are you sure you want to delete this list and all its dares? This action cannot be undone.",
+  "deleteButton": "Delete",
+  "listDeletedSuccess": "List \"{listName}\" deleted.",
+  "@listDeletedSuccess": {
+    "description": "Success message when a dare list is deleted.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "My Dares"
+      }
+    }
+  },
+  "startGameButtonTitle": "Start Game with \"{listName}\"",
+  "@startGameButtonTitle": {
+    "description": "Button text to start a game with the selected dare list.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "My Dares"
+      }
+    }
+  },
+
+  "noDareFound": "No dare found! Play nice. :)",
+  "dareDisplayScreenTitle": "Dare Time!",
+  "playerChosenTitle": "Player Chosen!",
+  "playAgainButton": "Play Again / Next Round",
+
+  "settingsScreenTitle": "Settings",
+  "languageSettingLabel": "Language",
+  "englishLanguage": "English",
+  "arabicLanguage": "Arabic",
+
+  "storeScreenTitle": "Dare Store",
+  "darePacksButtonLabel": "Dare Packs",
+  "getButtonLabel": "Get",
+  "ownedButtonLabel": "Owned",
+
+  "playAgainButtonChooser": "Play Again",
+  "tryAgainButtonChooser": "Try Again",
+
+  "noDareListsFoundMessage": "No dare lists found. Create your first one!"
 }

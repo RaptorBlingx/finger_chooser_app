@@ -1,44 +1,66 @@
 // lib/features/dare_display/presentation/screens/dare_display_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:audioplayers/audioplayers.dart'; // Added audioplayers
 import '../../../../models/finger_model.dart';
-import '../../../../models/dare_model.dart'; 
+import '../../../../models/dare_model.dart';
 
-class DareDisplayScreen extends StatelessWidget {
-  final Finger? selectedFinger; 
-  final Dare? selectedDare; 
+class DareDisplayScreen extends StatefulWidget { // Changed to StatefulWidget
+  final Finger? selectedFinger;
+  final Dare? selectedDare;
 
   const DareDisplayScreen({
     super.key,
     this.selectedFinger,
-    this.selectedDare, 
+    this.selectedDare,
   });
 
   static const String routeName = '/dare-display';
 
   @override
+  State<DareDisplayScreen> createState() => _DareDisplayScreenState();
+}
+
+class _DareDisplayScreenState extends State<DareDisplayScreen> {
+  final AudioPlayer _dareRevealPlayer = AudioPlayer();
+  final AudioPlayer _buttonClickPlayer = AudioPlayer();
+
+  @override
+  void initState() {
+    super.initState();
+    // Play dare reveal sound
+    if (widget.selectedDare != null) {
+      _dareRevealPlayer.play(AssetSource('sounds/dare_reveal.mp3'));
+    }
+  }
+
+  @override
+  void dispose() {
+    _dareRevealPlayer.dispose();
+    _buttonClickPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
-    // ***** ENSURE DARETEXT IS DECLARED HERE *****
-    final String dareText; // Declare the variable
-    if (selectedDare != null) {
-      // For now, prioritize English. Add locale checking later for Arabic.
-      // final locale = Localizations.localeOf(context);
-      // if (locale.languageCode == 'ar' && selectedDare!.textAr != null && selectedDare!.textAr!.isNotEmpty) {
-      //   dareText = selectedDare!.textAr!;
-      // } else {
-      //   dareText = selectedDare!.textEn;
-      // }
-      dareText = selectedDare!.textEn; // Simplified for now
+    final locale = Localizations.localeOf(context);
+
+    final String dareText;
+    if (widget.selectedDare != null) {
+      if (locale.languageCode == 'ar' && widget.selectedDare!.textAr != null && widget.selectedDare!.textAr!.isNotEmpty) {
+        dareText = widget.selectedDare!.textAr!;
+      } else {
+        dareText = widget.selectedDare!.textEn;
+      }
     } else {
-      dareText = "No dare found! Play nice. :)"; // Fallback
+      dareText = localizations.noDareFound;
     }
-    // *******************************************
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations.appTitle), 
+        title: Text(localizations.dareDisplayScreenTitle),
       ),
       body: Center(
         child: Padding(
@@ -46,9 +68,9 @@ class DareDisplayScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              if (selectedFinger != null)
+              if (widget.selectedFinger != null)
                 Text(
-                  "${localizations.appTitle}: Player chosen!", // Example, customize as needed
+                  localizations.playerChosenTitle,
                   style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
@@ -60,7 +82,7 @@ class DareDisplayScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  dareText, // <<< NOW dareText IS DEFINED
+                  dareText,
                   style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -68,9 +90,11 @@ class DareDisplayScreen extends StatelessWidget {
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
+                  HapticFeedback.selectionClick();
+                  _buttonClickPlayer.play(AssetSource('sounds/button_click.mp3'));
                   Navigator.of(context).pop();
                 },
-                child: const Text("Play Again / Next Round"),
+                child: Text(localizations.playAgainButton),
               ),
             ],
           ),

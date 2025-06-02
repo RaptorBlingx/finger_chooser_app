@@ -1,23 +1,27 @@
 // lib/features/finger_chooser/presentation/screens/chooser_screen.dart
+import 'dart:math'; // For random dare selection if handled here
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:audioplayers/audioplayers.dart'; // Added audioplayers
 
-import '../../../dare_display/presentation/screens/dare_display_screen.dart'; 
+import '../../../dare_display/presentation/screens/dare_display_screen.dart';
 
-import '../../../../providers/locale_provider.dart'; // For language switching
+// import '../../../../providers/locale_provider.dart'; // No longer needed here
 import '../provider/chooser_state_provider.dart'; // Our new state provider
 import '../provider/chooser_models.dart';      // For GamePhase, ChooserScreenState
 import '../../../../models/finger_model.dart';  // For Finger model
 
 class ChooserScreen extends ConsumerStatefulWidget {
- // const ChooserScreen({super.key});
-  final bool isQuickPlayMode; 
+  final bool isQuickPlayMode;
+  final List<String>? customDares; // New field for custom dares
 
   const ChooserScreen({
     super.key,
-    this.isQuickPlayMode = false, // Default to false (Party Play with dares)
+    this.isQuickPlayMode = false,
+    this.customDares, // Add to constructor
   });
 
 
@@ -30,9 +34,35 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
   late AnimationController _animationController;
   late Animation<double> _pulseAnimation;
 
+  // Audio players
+  final AudioPlayer _countdownStartPlayer = AudioPlayer();
+  final AudioPlayer _selectionPlayer = AudioPlayer();
+  final AudioPlayer _falseStartPlayer = AudioPlayer();
+  final AudioPlayer _buttonClickPlayer = AudioPlayer();
+
   @override
   void initState() {
     super.initState();
+
+    // Configure audio players - typically you might set release mode, etc.
+    // For simplicity, we'll just use them as is.
+    // It's good practice to set the source for players if you intend to play them multiple times
+    // but for one-shot plays, player.play(AssetSource(...)) is fine.
+
+    // Pass customDares to the notifier if they exist
+    // This needs to be done after the first build or in a way that notifier is available
+    // Or, the provider itself needs to be a family provider if customDares is known at provider creation
+    // For simplicity, if customDares is passed, we can call a method on the notifier.
+    // This should ideally be done once.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.customDares != null && widget.customDares!.isNotEmpty) {
+        ref.read(chooserStateProvider.notifier).setCustomDares(widget.customDares!);
+      }
+      // Also, if customDares are provided, it's not quick play mode by definition of our feature.
+      // The isQuickPlayMode flag might need to be overridden or handled carefully.
+      // For now, we assume customDares implies !isQuickPlayMode for dare display.
+    });
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
@@ -46,6 +76,11 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
   @override
   void dispose() {
     _animationController.dispose();
+    // Release audio players
+    _countdownStartPlayer.dispose();
+    _selectionPlayer.dispose();
+    _falseStartPlayer.dispose();
+    _buttonClickPlayer.dispose();
     super.dispose();
   }
 
@@ -53,19 +88,40 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final chooserState = ref.watch(chooserStateProvider);
-    final chooserNotifier = ref.read(chooserStateProvider.notifier); // <<< DEFINED HERE
-    final bool currentIsQuickPlayMode = widget.isQuickPlayMode; // Access mode
+    final chooserNotifier = ref.read(chooserStateProvider.notifier);
+    // Determine if we are in a mode that should display dares.
+    // This is true if it's not quickPlayMode OR if customDares are provided.
+    final bool shouldDisplayDares = !widget.isQuickPlayMode || (widget.customDares != null && widget.customDares!.isNotEmpty);
+    final bool currentIsQuickPlayModeEffective = widget.isQuickPlayMode && (widget.customDares == null || widget.customDares!.isEmpty);
 
 
     ref.listen<ChooserScreenState>(chooserStateProvider, (previous, next) {
-      if (next.gamePhase == GamePhase.selectionComplete && next.selectedFinger != null) {
-        _animationController.repeat(reverse: true); 
+      // Handle sounds and haptics based on game phase changes
+      if (previous?.gamePhase != next.gamePhase) {
+        if (next.gamePhase == GamePhase.countdownActive) {
+          HapticFeedback.mediumImpact();
+          _countdownStartPlayer.play(AssetSource('sounds/tick.mp3'));
+        } else if (next.gamePhase == GamePhase.selectionComplete && next.selectedFinger != null) {
+          // Heavy haptic is already in Notifier
+          _selectionPlayer.play(AssetSource('sounds/selection_winner.mp3'));
+          _animationController.repeat(reverse: true);
+        } else if (next.gamePhase == GamePhase.falseStart) {
+          // Light haptic is already in Notifier
+          _falseStartPlayer.play(AssetSource('sounds/false_start.mp3'));
+          _animationController.stop();
+          _animationController.reset();
+        }
+      }
 
-        // Only navigate to DareDisplayScreen if NOT in Quick Play mode
-        if (!currentIsQuickPlayMode) { // <<< CHECK MODE HERE
-          Future.delayed(const Duration(milliseconds: 2000), () { 
-            _animationController.stop(); 
-            _animationController.reset(); 
+      // Original logic for navigation and animation reset
+      if (next.gamePhase == GamePhase.selectionComplete && next.selectedFinger != null) {
+        // Navigate to DareDisplayScreen if not in effective Quick Play mode (i.e., if dares should be shown)
+        if (shouldDisplayDares) {
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            if (mounted) { // Ensure widget is still mounted before stopping animation or navigating
+                _animationController.stop();
+                _animationController.reset();
+            }
 
 
               if (ModalRoute.of(context)?.isCurrent ?? false) {
@@ -82,25 +138,24 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
               }
             });
           } else {
-            // In Quick Play mode, just show the result on ChooserScreen
+            // In effective Quick Play mode (no dares to show), just show the result on ChooserScreen
             // The animation will play. The "Play Again" button will allow reset.
-            // We might want to stop the animation after a shorter period if not navigating
             Future.delayed(const Duration(milliseconds: 2000), () {
-              if (mounted && _animationController.isAnimating) { // Check if widget is still mounted
-                  _animationController.stop();
-                  _animationController.reset(); // Optionally reset or just let it sit at end of pulse
+              if (mounted && _animationController.isAnimating) {
+                _animationController.stop();
+                _animationController.reset();
               }
             });
           }
-        } else if (previous?.gamePhase == GamePhase.selectionComplete && 
-                  next.gamePhase != GamePhase.selectionComplete) {
-          _animationController.stop();
-          _animationController.reset();
-        } else if (next.gamePhase == GamePhase.falseStart) {
-          _animationController.stop();
-          _animationController.reset();
+        } else if (previous?.gamePhase == GamePhase.selectionComplete && next.gamePhase != GamePhase.selectionComplete) {
+            if (mounted) {
+                _animationController.stop();
+                _animationController.reset();
+            }
         }
-      });
+        // False start animation reset is handled in the new block above
+      }
+    });
 
 
     String getInstructionText() {
@@ -113,13 +168,14 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
           return "Choosing in: ${chooserState.countdownSecondsRemaining}...";
         case GamePhase.selectionComplete:
           if (chooserState.selectedFinger != null) {
-            if (currentIsQuickPlayMode) { // <<< CHECK FOR QUICK PLAY MODE
-              return "Finger ID ${chooserState.selectedFinger!.id} is it! Tap 'Play Again'."; // Specific Quick Pick message
+            if (currentIsQuickPlayModeEffective) { 
+              return "Finger ID ${chooserState.selectedFinger!.id} is it! Tap 'Play Again'.";
             } else {
-              return "${localizations.appTitle}: Finger ID ${chooserState.selectedFinger!.id} chosen!"; // Party Play message
+              // This message will show briefly before navigating to DareDisplayScreen if dares are active
+              return "${localizations.appTitle}: Finger ID ${chooserState.selectedFinger!.id} chosen!";
             }
           }
-          return "Selection complete!"; // Fallback if selectedFinger is somehow null
+          return "Selection complete!";
         case GamePhase.falseStart:
           return "False Start! All fingers must stay. Try again.";
       }
@@ -129,17 +185,8 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(currentIsQuickPlayMode ? "Quick Pick" : localizations.appTitle),
-        actions: [
-          TextButton(
-            onPressed: () => ref.read(localeNotifierProvider.notifier).setLocale(const Locale('en', '')),
-            child: const Text('EN', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-          ),
-          TextButton(
-            onPressed: () => ref.read(localeNotifierProvider.notifier).setLocale(const Locale('ar', '')),
-            child: const Text('AR', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-          ),
-        ],
+        title: Text(currentIsQuickPlayModeEffective ? "Quick Pick" : (widget.customDares != null && widget.customDares!.isNotEmpty ? "Custom Game" : localizations.appTitle)),
+        actions: const [], // Removed language toggle buttons
       ),
       body: Column(
         children: [
@@ -211,22 +258,32 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
             child: (chooserState.gamePhase == GamePhase.selectionComplete)
                 ? ElevatedButton(
                     onPressed: () {
+                      HapticFeedback.selectionClick();
+                      _buttonClickPlayer.play(AssetSource('sounds/button_click.mp3'));
                       _animationController.stop();
                       _animationController.reset();
                       chooserNotifier.resetGame();
                     },
-                    child: const Text("Play Again"), 
+                    child: Text(localizations.playAgainButtonChooser),
                   )
                 : (chooserState.gamePhase == GamePhase.falseStart
                     ? ElevatedButton(
-                        onPressed: chooserNotifier.resetGame,
-                        child: const Text("Try Again"),
+                        onPressed: () {
+                          HapticFeedback.selectionClick();
+                          _buttonClickPlayer.play(AssetSource('sounds/button_click.mp3'));
+                          chooserNotifier.resetGame();
+                        },
+                        child: Text(localizations.tryAgainButtonChooser),
                       )
                     : ElevatedButton(
                         onPressed: chooserState.canStartCountdown &&
                                 chooserState.gamePhase ==
                                     GamePhase.waitingForFingers
-                            ? chooserNotifier.startCountdown
+                            ? () {
+                                HapticFeedback.selectionClick();
+                                _buttonClickPlayer.play(AssetSource('sounds/button_click.mp3'));
+                                chooserNotifier.startCountdown();
+                              }
                             : null,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),

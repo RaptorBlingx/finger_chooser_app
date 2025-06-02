@@ -1,32 +1,94 @@
 // lib/services/dare_service.dart
 import 'dart:convert';
-import 'dart:math'; 
+import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle; // For loading assets
+import 'package:firebase_remote_config/firebase_remote_config.dart'; // Added
 import '../models/dare_model.dart';
 import '../models/filter_criteria_model.dart';
 
-
 class DareService {
-  // Cache for loaded dares to avoid reloading from JSON every time
   List<Dare>? _cachedCoreDares;
-    final Random _random = Random(); // For selecting a random dare
+  final Random _random = Random();
+  FirebaseRemoteConfig? _remoteConfig; // Added
+  bool _isRemoteConfigInitialized = false; // Flag to ensure init runs once
+
+  static const String _remoteConfigKeyDares = 'core_dares_json';
+
+  // Initialize Remote Config and set defaults
+  Future<void> _initializeRemoteConfig() async {
+    if (_isRemoteConfigInitialized) return;
+
+    _remoteConfig = FirebaseRemoteConfig.instance;
+
+    // Load default values from local asset
+    String localDaresJsonString = "[]"; // Default to empty list if asset load fails
+    try {
+      localDaresJsonString = await rootBundle.loadString('assets/dares/core_dares.json');
+    } catch (e) {
+      print('Error loading local dares for Remote Config defaults: $e');
+    }
+
+    await _remoteConfig!.setDefaults({
+      _remoteConfigKeyDares: localDaresJsonString,
+    });
+
+    // Attempt to fetch and activate
+    try {
+      await _remoteConfig!.fetchAndActivate();
+      print('Remote Config fetched and activated.');
+    } catch (e) {
+      print('Error fetching or activating Remote Config: $e. Defaults will be used.');
+    }
+    _isRemoteConfigInitialized = true;
+  }
+
+  Future<List<Dare>> _parseDares(String jsonString) {
+    try {
+      final List<dynamic> jsonList = json.decode(jsonString) as List<dynamic>;
+      final List<Dare> dares = jsonList.map((jsonItem) {
+        return Dare.fromJson(jsonItem as Map<String, dynamic>);
+      }).toList();
+      return Future.value(dares);
+    } catch (e) {
+      print('Error parsing dares JSON: $e');
+      return Future.value([]); // Return empty list on parsing error
+    }
+  }
 
   Future<List<Dare>> _loadCoreDaresIfNeeded() async {
     if (_cachedCoreDares != null) {
       return _cachedCoreDares!;
     }
-    try {
-      final String jsonString = await rootBundle.loadString('assets/dares/core_dares.json');
-      final List<dynamic> jsonList = json.decode(jsonString) as List<dynamic>;
-      final List<Dare> dares = jsonList.map((jsonItem) {
-        return Dare.fromJson(jsonItem as Map<String, dynamic>);
-      }).toList();
-      _cachedCoreDares = dares;
-      return dares;
-    } catch (e) {
-      print('Error loading core dares: $e');
-      return [];
+
+    await _initializeRemoteConfig(); // Ensure Remote Config is initialized
+
+    String daresJsonString;
+    bool loadedFromRemote = false;
+
+    if (_remoteConfig != null) {
+      daresJsonString = _remoteConfig!.getString(_remoteConfigKeyDares);
+      if (daresJsonString.isNotEmpty && daresJsonString != "[]") { // Check if not empty or default empty
+        print('Loading dares from Firebase Remote Config.');
+        loadedFromRemote = true;
+      } else {
+        // Fallback if Remote Config string is empty or still the initial "[]" default (if asset loading failed during setDefaults)
+        print('Remote Config dares string is empty or default. Falling back to local asset.');
+        daresJsonString = await rootBundle.loadString('assets/dares/core_dares.json');
+      }
+    } else {
+      // Should not happen if _initializeRemoteConfig was awaited
+      print('Remote Config instance is null. Falling back to local asset.');
+      daresJsonString = await rootBundle.loadString('assets/dares/core_dares.json');
     }
+    
+    _cachedCoreDares = await _parseDares(daresJsonString);
+    if (loadedFromRemote && _cachedCoreDares!.isEmpty) {
+        // If remote config was supposed to be used but parsing failed or it was empty JSON array,
+        // this could be an indication of bad remote data.
+        // For robustness, one might consider a final fallback to local assets here too.
+        print('Warning: Loaded from Remote Config but resulted in empty dare list. Check Remote Config data format.');
+    }
+    return _cachedCoreDares!;
   }
 
 

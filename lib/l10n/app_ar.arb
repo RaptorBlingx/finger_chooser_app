@@ -4,5 +4,103 @@
   "placeFingersPrompt": "ضع الأصابع على الشاشة!",
   "selectButton": "اختر واحد",
   "settings": "الإعدادات",
-  "manageDares": "إدارة التحديات"
+  "manageDares": "إدارة التحديات",
+
+  "customPlayWizardTitle": "معالج اللعب المخصص",
+  "dareListsTitle": "قوائم التحدي",
+  "enterNewListNameHint": "أدخل اسم القائمة الجديدة",
+  "createListButton": "إنشاء قائمة",
+  "listAlreadyExistsError": "القائمة \"{listName}\" موجودة بالفعل.",
+  "@listAlreadyExistsError": {
+    "description": "رسالة خطأ عند وجود قائمة تحدي بنفس الاسم بالفعل.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "تحدياتي"
+      }
+    }
+  },
+  "listCreatedSuccess": "تم إنشاء القائمة \"{listName}\".",
+  "@listCreatedSuccess": {
+    "description": "رسالة نجاح عند إنشاء قائمة تحدي.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "تحدياتي"
+      }
+    }
+  },
+  "selectAListHint": "اختر قائمة",
+  "deleteSelectedListTooltip": "حذف القائمة المحددة",
+  "noCustomDareListsMessage": "لم يتم إنشاء قوائم تحدي مخصصة بعد.",
+  "daresInListTitle": "التحديات في \"{listName}\"",
+  "@daresInListTitle": {
+    "description": "عنوان القسم الذي يعرض التحديات في قائمة معينة.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "تحدياتي"
+      }
+    }
+  },
+  "enterNewDareHint": "أدخل تحديًا جديدًا",
+  "addDareButton": "إضافة تحدي",
+  "noDaresInListMessage": "لم تتم إضافة تحديات إلى هذه القائمة بعد. أضف البعض!",
+  "editDareTitle": "تعديل التحدي",
+  "editDareHint": "عدّل التحدي",
+  "cancelButton": "إلغاء",
+  "saveButton": "حفظ",
+  "deleteDareTooltip": "حذف التحدي",
+  "deleteListDialogTitle": "حذف القائمة \"{listName}\"؟",
+  "@deleteListDialogTitle": {
+    "description": "عنوان مربع حوار تأكيد حذف القائمة.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "تحدياتي"
+      }
+    }
+  },
+  "deleteListDialogContent": "هل أنت متأكد أنك تريد حذف هذه القائمة وجميع تحدياتها؟ لا يمكن التراجع عن هذا الإجراء.",
+  "deleteButton": "حذف",
+  "listDeletedSuccess": "تم حذف القائمة \"{listName}\".",
+  "@listDeletedSuccess": {
+    "description": "رسالة نجاح عند حذف قائمة تحدي.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "تحدياتي"
+      }
+    }
+  },
+  "startGameButtonTitle": "ابدأ اللعبة بـ \"{listName}\"",
+  "@startGameButtonTitle": {
+    "description": "نص زر بدء اللعبة بقائمة التحدي المحددة.",
+    "placeholders": {
+      "listName": {
+        "type": "String",
+        "example": "تحدياتي"
+      }
+    }
+  },
+
+  "noDareFound": "لم يتم العثور على تحدي! العب بلطف. :)",
+  "dareDisplayScreenTitle": "وقت التحدي!",
+  "playerChosenTitle": "تم اختيار اللاعب!",
+  "playAgainButton": "العب مرة أخرى / الجولة التالية",
+
+  "settingsScreenTitle": "الإعدادات",
+  "languageSettingLabel": "اللغة",
+  "englishLanguage": "الإنجليزية",
+  "arabicLanguage": "العربية",
+
+  "storeScreenTitle": "متجر التحديات",
+  "darePacksButtonLabel": "حزم التحديات",
+  "getButtonLabel": "احصل عليه",
+  "ownedButtonLabel": "مملوك",
+
+  "playAgainButtonChooser": "العب مجدداً",
+  "tryAgainButtonChooser": "حاول مجدداً",
+
+  "noDareListsFoundMessage": "لم يتم العثور على قوائم تحديات. قم بإنشاء قائمتك الأولى!"
 }

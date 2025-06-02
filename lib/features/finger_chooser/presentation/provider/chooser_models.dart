@@ -18,39 +18,40 @@ class ChooserScreenState {
   final int countdownSecondsRemaining;
   final GamePhase gamePhase;
   final Finger? selectedFinger;
-  final Dare? selectedDare; 
-  final bool canStartCountdown; 
+  final Dare? selectedDare;
+  final bool canStartCountdown;
+  final List<String>? customDares; // New field for custom dares
 
   const ChooserScreenState({
     this.activeFingers = const [],
     this.countdownSecondsRemaining = 5, // Default, will be overridden by Notifier's initial state
     this.gamePhase = GamePhase.waitingForFingers,
     this.selectedFinger,
-    this.selectedDare, 
+    this.selectedDare,
     this.canStartCountdown = false,
+    this.customDares, // Add to constructor
   });
 
-  // Ensure this copyWith method includes clearSelectedFinger
   ChooserScreenState copyWith({
     List<Finger>? activeFingers,
     int? countdownSecondsRemaining,
     GamePhase? gamePhase,
-    Finger? selectedFinger, // Allows passing a new selected finger
+    Finger? selectedFinger,
     Dare? selectedDare,
-    bool clearSelectedFinger = false, // Flag to explicitly set selectedFinger to null
-    bool clearSelectedDare = false, 
+    bool clearSelectedFinger = false,
+    bool clearSelectedDare = false,
     bool? canStartCountdown,
+    List<String>? customDares, // Add to copyWith parameters
+    bool clearCustomDares = false, // Flag to explicitly set customDares to null
   }) {
     return ChooserScreenState(
       activeFingers: activeFingers ?? this.activeFingers,
       countdownSecondsRemaining: countdownSecondsRemaining ?? this.countdownSecondsRemaining,
       gamePhase: gamePhase ?? this.gamePhase,
-      // If clearSelectedFinger is true, selectedFinger becomes null.
-      // Otherwise, if a new selectedFinger is provided, use it.
-      // Otherwise, keep the existing selectedFinger.
       selectedFinger: clearSelectedFinger ? null : (selectedFinger ?? this.selectedFinger),
       selectedDare: clearSelectedDare ? null : (selectedDare ?? this.selectedDare),
       canStartCountdown: canStartCountdown ?? this.canStartCountdown,
+      customDares: clearCustomDares ? null : (customDares ?? this.customDares), // Handle customDares
     );
   }
 }

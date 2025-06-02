@@ -42,6 +42,9 @@ dependencies:
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
   shared_preferences: ^2.5.3
+  audioplayers: ^6.0.0 # Added audioplayers
+  firebase_analytics: ^11.2.0
+  firebase_remote_config: ^5.2.0
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +58,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   build_runner: ^2.4.13
   riverpod_generator: ^2.6.3
+  mockito: ^5.4.4 # Added mockito for testing
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,6 +75,7 @@ flutter:
 
   assets:
     - assets/dares/ # This includes all files in the assets/dares/ directory
+    - assets/sounds/ # Added sounds directory
 
   # To add assets to your application, add an assets section, like this:
   # assets:
