@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "691821521227",
+    "project_id": "finger-chooser-app",
+    "storage_bucket": "finger-chooser-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691821521227:android:ac92a94c7155a8aa7b20ce",
+        "android_client_info": {
+          "package_name": "com.example.finger_chooser_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdGmG7lr3nDxBqRY6kgFuW-ZKvMLwOips"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

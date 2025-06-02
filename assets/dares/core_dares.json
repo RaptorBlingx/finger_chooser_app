@@ -1,0 +1,46 @@
+[
+    {
+      "id": "core_001",
+      "text_en": "Sing the chorus of your favorite song out loud.",
+      "text_ar": null,
+      "groupType": ["friends", "family"],
+      "place": ["home", "public"],
+      "gender": ["mixed"],
+      "intensity": "mild",
+      "minPlayers": 1,
+      "maxPlayers": null
+    },
+    {
+      "id": "core_002",
+      "text_en": "Do your best impression of a chicken.",
+      "text_ar": null,
+      "groupType": ["friends", "family", "kids"],
+      "place": ["home", "party"],
+      "gender": ["mixed"],
+      "intensity": "mild",
+      "minPlayers": 1,
+      "maxPlayers": null
+    },
+    {
+      "id": "core_003",
+      "text_en": "Talk in a robot voice for the next 3 minutes.",
+      "text_ar": null,
+      "groupType": ["friends", "college"],
+      "place": ["home", "campus", "party"],
+      "gender": ["mixed"],
+      "intensity": "spicy",
+      "minPlayers": 1,
+      "maxPlayers": null
+    },
+    {
+      "id": "core_004",
+      "text_en": "Let another player post a silly status on one of your social media accounts.",
+      "text_ar": null,
+      "groupType": ["friends", "college"],
+      "place": ["any"],
+      "gender": ["mixed"],
+      "intensity": "spicy",
+      "minPlayers": 2,
+      "maxPlayers": null
+    }
+  ]

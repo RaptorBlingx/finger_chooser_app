@@ -1,0 +1,11 @@
+{
+  "@@locale": "en",
+  "appTitle": "Finger Chooser",
+  "@appTitle": {
+    "description": "The main title of the application"
+  },
+  "placeFingersPrompt": "Place fingers on the screen!",
+  "selectButton": "Select One",
+  "settings": "Settings",
+  "manageDares": "Manage Dares"
+}
