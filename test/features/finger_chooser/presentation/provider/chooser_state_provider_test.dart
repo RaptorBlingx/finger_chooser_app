@@ -20,7 +20,7 @@ void main() {
 
   late ChooserStateNotifier notifier;
   late MockDareService mockDareService;
-  
+
   // For HapticFeedback mocking
   final List<MethodCall> log = <MethodCall>[];
 
@@ -33,7 +33,7 @@ void main() {
     // For a robust test, DareService should be injectable.
     // However, the _selectWinner method directly instantiates DareService.
     // We will focus on testing other aspects and how it handles custom dares.
-    
+
     notifier = ChooserStateNotifier();
 
     // Mock HapticFeedback
@@ -73,12 +73,12 @@ void main() {
         notifier.moveFinger(const PointerMoveEvent(pointer: 1, position: Offset(15, 15)));
         expect(notifier.debugState.activeFingers.first.position, const Offset(15, 15));
       });
-      
+
       test('moveFinger does nothing if game phase is countdownActive', () {
         notifier.addFinger(const PointerDownEvent(pointer: 1, position: Offset(10, 10)));
         notifier.addFinger(const PointerDownEvent(pointer: 2, position: Offset(20, 20)));
         notifier.startCountdown(); // Phase is now countdownActive
-        
+
         notifier.moveFinger(const PointerMoveEvent(pointer: 1, position: Offset(100, 100)));
         // Expect original position because moveFinger should return early
         expect(notifier.debugState.activeFingers.firstWhere((f) => f.id == 1).position, isNot(const Offset(100,100)));
@@ -88,7 +88,7 @@ void main() {
       test('removeFinger removes a finger and updates state', () {
         notifier.addFinger(const PointerDownEvent(pointer: 1, position: Offset(10, 10)));
         notifier.addFinger(const PointerDownEvent(pointer: 2, position: Offset(20, 20)));
-        
+
         notifier.removeFinger(const PointerUpEvent(pointer: 1, position: Offset(10, 10)));
         expect(notifier.debugState.activeFingers.length, 1);
         expect(notifier.debugState.activeFingers.first.id, 2);
@@ -100,7 +100,7 @@ void main() {
       test('startCountdown changes game phase and starts timer (indirectly)', () {
         notifier.addFinger(const PointerDownEvent(pointer: 1, position: Offset(10, 10)));
         notifier.addFinger(const PointerDownEvent(pointer: 2, position: Offset(20, 20)));
-        
+
         notifier.startCountdown();
         expect(notifier.debugState.gamePhase, GamePhase.countdownActive);
         expect(notifier.debugState.countdownSecondsRemaining, kCountdownSeconds);
@@ -116,13 +116,13 @@ void main() {
       test('_tickCountdown reduces remaining seconds, then selects winner', () async {
         notifier.addFinger(const PointerDownEvent(pointer: 1, position: Offset(10, 10)));
         notifier.addFinger(const PointerDownEvent(pointer: 2, position: Offset(20, 20)));
-        
+
         // Mock getRandomDare for _selectWinner part
         when(mockDareService.getRandomDare(criteria: anyNamed('criteria')))
             .thenAnswer((_) async => const Dare(id: 'd1', textEn: 'Test Dare', category: 'test', gender: [], groupType: [], place: [], intensity: "mild", minPlayers: 1));
 
         notifier.startCountdown();
-        
+
         // Wait for countdown to finish
         // Due to the direct instantiation of DareService, we can't mock it for THIS notifier instance easily.
         // The test for _selectWinner will be limited.
@@ -138,12 +138,12 @@ void main() {
       test('_selectWinner selects a finger and sets game phase to selectionComplete', () async {
         notifier.addFinger(const PointerDownEvent(pointer: 1, position: Offset(10, 10)));
         notifier.addFinger(const PointerDownEvent(pointer: 2, position: Offset(20, 20)));
-        
+
         // Directly call _selectWinner (making it public for test or using a helper)
         // This is tricky as _selectWinner is private. We test it via countdown completion.
         // As noted, DareService interaction is hard to mock here.
         // We'll focus on the custom dare aspect.
-        
+
         notifier.startCountdown();
         await Future.delayed(Duration(seconds: kCountdownSeconds + 1));
 
@@ -159,7 +159,7 @@ void main() {
 
         notifier.startCountdown();
         await Future.delayed(Duration(seconds: kCountdownSeconds + 1));
-        
+
         expect(notifier.debugState.gamePhase, GamePhase.selectionComplete);
         expect(notifier.debugState.selectedFinger, isNotNull);
         expect(notifier.debugState.selectedDare, isNotNull);
@@ -167,13 +167,13 @@ void main() {
         expect(notifier.debugState.selectedDare!.category, 'Custom');
       });
     });
-    
+
     group('False Start Logic:', () {
       test('_handleFalseStart sets game phase to falseStart and clears selection', () {
         notifier.addFinger(const PointerDownEvent(pointer: 1, position: Offset(10, 10)));
         notifier.addFinger(const PointerDownEvent(pointer: 2, position: Offset(20, 20)));
         notifier.startCountdown();
-        
+
         // Simulate removing a finger during countdown
         notifier.removeFinger(const PointerUpEvent(pointer: 1, position: Offset(10,10)));
 
@@ -201,7 +201,7 @@ void main() {
         });
       });
     });
-    
+
     group('setCustomDares', () {
       test('setCustomDares updates the customDares in state', () {
         final testDares = ['Test Dare 1', 'Test Dare 2'];

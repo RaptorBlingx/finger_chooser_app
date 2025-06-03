@@ -61,11 +61,11 @@ void main() {
       expect(find.textContaining('Party Play', findRichText: true), findsOneWidget);
       expect(find.textContaining('Quick Pick', findRichText: true), findsOneWidget);
       expect(find.textContaining('Custom Play', findRichText: true), findsOneWidget);
-      
+
       // Need to access localizations for Dare Packs button
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
       expect(find.text(localizations.darePacksButtonLabel), findsOneWidget);
-      
+
       // Verify settings icon
       expect(find.byIcon(Icons.settings), findsOneWidget);
       expect(find.byType(FlutterLogo), findsOneWidget); // Check for logo

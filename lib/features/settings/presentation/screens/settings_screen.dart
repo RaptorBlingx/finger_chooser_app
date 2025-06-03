@@ -1,3 +1,8 @@
+/// Screen for managing application settings.
+///
+/// Currently, this screen allows users to change the application language (English/Arabic).
+/// It uses Riverpod to interact with the `LocaleNotifier` for state management
+/// and persistence of the selected locale.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_riverpod/flutter_riverpod.dart';

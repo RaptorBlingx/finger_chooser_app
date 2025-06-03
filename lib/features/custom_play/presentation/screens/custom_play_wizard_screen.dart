@@ -1,3 +1,14 @@
+/// Screen for creating, managing, and selecting custom dare lists.
+///
+/// Users can:
+/// - Create new dare lists.
+/// - Add dares to their lists.
+/// - Edit or delete existing dares.
+/// - Delete entire dare lists.
+/// - Select a list to start a game with (navigates to ChooserScreen with custom dares).
+///
+/// State is managed locally using `StatefulWidget` and `SharedPreferences` for persistence.
+/// Includes loading indicators and messages for empty states.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,10 +55,10 @@ class _CustomPlayWizardScreenState extends State<CustomPlayWizardScreen> {
       _isLoading = true;
     });
     // Simulate a small delay for loading if needed, SharedPreferences is usually fast
-    // await Future.delayed(const Duration(milliseconds: 500)); 
+    // await Future.delayed(const Duration(milliseconds: 500));
     final prefs = await SharedPreferences.getInstance();
     // Ensure that setState is called after async operation, but before using the data
-    if (!mounted) return; 
+    if (!mounted) return;
     _dareLists = prefs.getStringList('custom_dare_lists') ?? [];
     _dareListMap = {};
     for (String listName in _dareLists) {
@@ -158,7 +169,7 @@ class _CustomPlayWizardScreenState extends State<CustomPlayWizardScreen> {
     });
     _saveDareLists();
   }
-  
+
   void _deleteList() {
     if (_noListSelected) return;
     final listToDelete = _selectedList!;
@@ -204,6 +215,177 @@ class _CustomPlayWizardScreenState extends State<CustomPlayWizardScreen> {
 
 
   @override
+  // Helper method to build the dare list management section
+  Widget _buildDareListManagementSection(BuildContext context, AppLocalizations localizations) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(localizations.dareListsTitle, style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _listNameController,
+                decoration: InputDecoration(
+                  hintText: localizations.enterNewListNameHint,
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: (_) => setState(() {}),
+              ),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              onPressed: _isListNameEmpty ? null : _createList,
+              child: Text(localizations.createListButton),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        if (_dareLists.isEmpty)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              child: Text(localizations.noDareListsFoundMessage, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
+            )
+          )
+        else
+          Row(
+            children: [
+              Expanded(
+                child: DropdownButtonFormField<String>(
+                  value: _selectedList,
+                  hint: Text(localizations.selectAListHint),
+                  decoration: const InputDecoration(border: OutlineInputBorder()),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedList = newValue;
+                    });
+                  },
+                  items: _dareLists.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+              if (!_noListSelected) ...[
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: Icon(Icons.delete_forever, color: Colors.red[700]),
+                  tooltip: localizations.deleteSelectedListTooltip,
+                  onPressed: _deleteList,
+                ),
+              ]
+            ],
+          ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  // Helper method to build the dare entry and list section
+  Widget _buildDareDetailsSection(BuildContext context, AppLocalizations localizations, List<String> currentDares) {
+    if (_dareLists.isEmpty || _noListSelected) {
+      return Container(); // Don't show this section if no list is selected or no lists exist
+    }
+    return Expanded( // This Expanded widget is crucial for the ListView.builder
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(localizations.daresInListTitle(_selectedList!), style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _dareController,
+                  decoration: InputDecoration(
+                    hintText: localizations.enterNewDareHint,
+                    border: const OutlineInputBorder(),
+                  ),
+                  onChanged: (_) => setState(() {}),
+                ),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: _isDareEmpty || _noListSelected ? null : _addDare,
+                child: Text(localizations.addDareButton),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: currentDares.isEmpty
+                ? Center(child: Text(localizations.noDaresInListMessage))
+                : ListView.builder(
+                    itemCount: currentDares.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: ListTile(
+                          title: Text(currentDares[index]),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                tooltip: localizations.editDareTitle,
+                                onPressed: () {
+                                  HapticFeedback.selectionClick();
+                                  _editDare(index);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                tooltip: localizations.deleteDareTooltip,
+                                onPressed: () {
+                                  HapticFeedback.selectionClick();
+                                  _deleteDare(index);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+          const SizedBox(height: 16),
+          if (!_noListSelected && currentDares.isNotEmpty)
+            Center(
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.play_arrow),
+                label: Text(localizations.startGameButtonTitle(_selectedList!)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 16)
+                ),
+                onPressed: () {
+                  HapticFeedback.selectionClick();
+                  _playButtonClickSound();
+                  if (_selectedList != null && _dareListMap.containsKey(_selectedList!) && _dareListMap[_selectedList!]!.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChooserScreen(
+                          customDares: _dareListMap[_selectedList!]!,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     List<String> currentDares = _selectedList != null && _dareListMap.containsKey(_selectedList)
@@ -228,168 +410,18 @@ class _CustomPlayWizardScreenState extends State<CustomPlayWizardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(localizations.dareListsTitle, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _listNameController,
-                    decoration: InputDecoration(
-                      hintText: localizations.enterNewListNameHint,
-                      border: const OutlineInputBorder(),
-                    ),
-                    onChanged: (_) => setState(() {}),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: _isListNameEmpty ? null : _createList,
-                  child: Text(localizations.createListButton),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            if (_dareLists.isEmpty) // Show message if no lists exist at all
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 24.0),
-                  child: Text(localizations.noDareListsFoundMessage, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
-                )
-              )
-            else ...[ // Show list management UI if lists exist
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      value: _selectedList,
-                      hint: Text(localizations.selectAListHint),
-                      decoration: const InputDecoration(border: OutlineInputBorder()),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedList = newValue;
-                        });
-                      },
-                      items: _dareLists.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  if (!_noListSelected) ...[
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: Icon(Icons.delete_forever, color: Colors.red[700]),
-                      tooltip: localizations.deleteSelectedListTooltip,
-                      onPressed: _deleteList,
-                    ),
-                  ]
-                ],
+            _buildDareListManagementSection(context, localizations),
+            // Conditionally build the dare details section
+            // It needs an Expanded wrapper if it contains an Expanded ListView.builder
+            // So, we ensure that _buildDareDetailsSection itself is Expanded if it's going to be visible.
+            if (_dareLists.isNotEmpty && !_noListSelected)
+              _buildDareDetailsSection(context, localizations, currentDares)
+            else if (_dareLists.isNotEmpty && _noListSelected)
+              Padding( // Optional: Prompt to select a list if lists exist but none selected
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                child: Center(child: Text(localizations.selectAListHint, style: Theme.of(context).textTheme.titleMedium)),
               ),
-              const SizedBox(height: 24),
-            ],
-            
-            // This section for dares should only show if a list is selected AND lists exist
-            if (_dareLists.isNotEmpty && !_noListSelected) ...[
-              Text(localizations.daresInListTitle(_selectedList!), style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _dareController,
-                      decoration: InputDecoration(
-                        hintText: localizations.enterNewDareHint,
-                        border: const OutlineInputBorder(),
-                      ),
-                      onChanged: (_) => setState(() {}), // To rebuild and update button state
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: _isDareEmpty || _noListSelected ? null : _addDare,
-                    child: Text(localizations.addDareButton),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: currentDares.isEmpty
-                    ? Center(child: Text(localizations.noDaresInListMessage))
-                    : ListView.builder(
-                        itemCount: currentDares.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: ListTile(
-                              title: Text(currentDares[index]), // Dares are user-generated
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit, color: Colors.blue),
-                                    tooltip: localizations.editDareTitle, // Re-using Edit Dare title for tooltip
-                                    onPressed: () {
-                                      HapticFeedback.selectionClick();
-                                      // _playButtonClickSound(); // Optional for small icon buttons
-                                      _editDare(index);
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.red),
-                                    tooltip: localizations.deleteDareTooltip,
-                                    onPressed: () {
-                                      HapticFeedback.selectionClick();
-                                      // _playButtonClickSound(); // Optional for small icon buttons
-                                      _deleteDare(index);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-              ),
-              const SizedBox(height: 16),
-              if (!_noListSelected && currentDares.isNotEmpty)
-                Center(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.play_arrow),
-                    label: Text(localizations.startGameButtonTitle(_selectedList ?? "")),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      textStyle: const TextStyle(fontSize: 16)
-                    ),
-                    onPressed: () {
-                      HapticFeedback.selectionClick();
-                      _playButtonClickSound();
-                      if (_selectedList != null && _dareListMap.containsKey(_selectedList!) && _dareListMap[_selectedList!]!.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChooserScreen(
-                              customDares: _dareListMap[_selectedList!]!,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-            ],
-            // Overall Save button - might not be strictly necessary if saving happens on each action
-            // but can be a good UX pattern for a "final" save.
-            // For now, individual actions save immediately.
-            // const SizedBox(height: 20),
-            // ElevatedButton(
-            //   onPressed: _saveDareLists, // Example: Explicit save button
-            //   child: const Text('Save All Changes'),
-            // ),
+            // Other elements like global save button could go here if not part of a conditionally expanded section
           ],
         ),
       ),

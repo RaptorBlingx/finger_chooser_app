@@ -1,10 +1,17 @@
 // lib/features/home/presentation/screens/home_screen.dart
-import 'package:flutter/material.dart';
+
+/// The main landing screen of the application.
+///
+/// Displays options for different game modes (Party Play, Quick Pick),
+/// navigation to Custom Play wizard, Dare Store, and Settings.
+/// Also includes basic app branding.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // For localized text
 import 'package:audioplayers/audioplayers.dart'; // Added audioplayers
 import 'package:firebase_analytics/firebase_analytics.dart'; // Added Firebase Analytics
+// Note: Duplicate FlutterLogo import was removed by hand as the tool might not catch it.
+// If it was `import 'package:flutter/material.dart' as fm;` then it would be fine.
 import '../../../finger_chooser/presentation/screens/chooser_screen.dart';
 import 'package:dare_n_share_app/features/custom_play/presentation/screens/custom_play_wizard_screen.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
@@ -76,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> { // State class
                   textStyle: const TextStyle(fontSize: 18),
                 ),
                 onPressed: () => _handleNavigation(
-                  context, 
+                  context,
                   const ChooserScreen(isQuickPlayMode: false),
                   eventName: 'party_play_started',
                   parameters: {'mode': 'party_dares'},
@@ -90,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> { // State class
                   textStyle: const TextStyle(fontSize: 18),
                 ),
                 onPressed: () => _handleNavigation(
-                  context, 
+                  context,
                   const ChooserScreen(isQuickPlayMode: true),
                   eventName: 'quick_pick_started',
                   parameters: {'mode': 'quick_pick_fingers_only'},
@@ -104,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> { // State class
                   textStyle: const TextStyle(fontSize: 18),
                 ),
                 onPressed: () => _handleNavigation(
-                  context, 
+                  context,
                   const CustomPlayWizardScreen(),
                   eventName: 'custom_play_wizard_opened',
                 ),
@@ -119,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> { // State class
                   textStyle: const TextStyle(fontSize: 18),
                 ),
                 onPressed: () => _handleNavigation(
-                  context, 
+                  context,
                   const StoreScreen(),
                   eventName: 'store_opened', // Example event for store
                 ),

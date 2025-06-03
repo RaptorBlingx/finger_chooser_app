@@ -1,3 +1,8 @@
+/// Screen that displays available dare packs for purchase or acquisition.
+///
+/// This screen currently shows a placeholder list of dare packs.
+/// Future enhancements would include actual purchase/unlock logic and
+/// integration with a backend or in-app purchase service.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

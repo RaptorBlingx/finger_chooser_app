@@ -36,7 +36,7 @@ void main() {
       final notifierWithPrefs = LocaleNotifier();
       expect(notifierWithPrefs.debugState, const Locale('ar', ''));
     });
-    
+
     test('Loads English locale from SharedPreferences if "en" is stored', () async {
       SharedPreferences.setMockInitialValues({
         LocaleNotifier.localePrefsKey: 'en',
@@ -72,7 +72,7 @@ void main() {
       await localeNotifier.setLocale(const Locale('fr', ''));
       expect(localeNotifier.debugState, const Locale('fr', ''));
       final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getString(LocaleNotifier.localePrefsKey), 'fr'); 
+      expect(prefs.getString(LocaleNotifier.localePrefsKey), 'fr');
       // If it were to default, it would be:
       // expect(localeNotifier.debugState, const Locale('en', ''));
       // expect(prefs.getString(LocaleNotifier.localePrefsKey), 'en'); // or not set

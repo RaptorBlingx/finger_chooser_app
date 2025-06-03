@@ -1,6 +1,21 @@
 // lib/features/finger_chooser/presentation/screens/chooser_screen.dart
 import 'dart:math'; // For random dare selection if handled here
 
+/// This screen is the core of the finger choosing game.
+///
+/// It allows users to place multiple fingers on the screen. After a countdown,
+/// one finger is randomly selected. Depending on the game mode (`isQuickPlayMode`
+/// or if `customDares` are provided), it may navigate to the `DareDisplayScreen`
+/// to show a dare for the selected person.
+///
+/// It handles different game phases:
+/// - Waiting for fingers.
+/// - Countdown active.
+/// - Selection complete.
+/// - False start (if a finger is lifted during countdown).
+///
+/// It uses Riverpod for state management via `ChooserStateNotifier` and
+/// includes animations for the selected finger, haptic feedback, and sound effects.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -168,7 +183,7 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
           return "Choosing in: ${chooserState.countdownSecondsRemaining}...";
         case GamePhase.selectionComplete:
           if (chooserState.selectedFinger != null) {
-            if (currentIsQuickPlayModeEffective) { 
+            if (currentIsQuickPlayModeEffective) {
               return "Finger ID ${chooserState.selectedFinger!.id} is it! Tap 'Play Again'.";
             } else {
               // This message will show briefly before navigating to DareDisplayScreen if dares are active

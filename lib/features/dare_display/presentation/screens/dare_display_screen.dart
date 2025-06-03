@@ -1,4 +1,10 @@
 // lib/features/dare_display/presentation/screens/dare_display_screen.dart
+
+/// Screen responsible for displaying the selected dare to the user.
+///
+/// It receives the chosen [Finger] (optional, to indicate who was chosen)
+/// and the [Dare] to be displayed. The dare text is localized based on the
+/// current app locale. Sound and haptic feedback are provided.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

@@ -6,15 +6,29 @@ import 'package:firebase_remote_config/firebase_remote_config.dart'; // Added
 import '../models/dare_model.dart';
 import '../models/filter_criteria_model.dart';
 
+/// A service responsible for loading and providing dares.
+///
+/// Dares are fetched primarily from Firebase Remote Config, with a fallback
+/// to a local JSON asset if Remote Config is unavailable or fails.
+/// Loaded dares are cached in memory to prevent redundant loading.
 class DareService {
+  /// In-memory cache for core dares to optimize performance.
   List<Dare>? _cachedCoreDares;
   final Random _random = Random();
-  FirebaseRemoteConfig? _remoteConfig; // Added
-  bool _isRemoteConfigInitialized = false; // Flag to ensure init runs once
 
+  /// Instance of Firebase Remote Config.
+  FirebaseRemoteConfig? _remoteConfig;
+  /// Flag to track if Remote Config has been initialized.
+  bool _isRemoteConfigInitialized = false;
+
+  /// Key used for fetching the dares JSON string from Firebase Remote Config.
   static const String _remoteConfigKeyDares = 'core_dares_json';
 
-  // Initialize Remote Config and set defaults
+  /// Initializes Firebase Remote Config.
+  ///
+  /// Sets default values (from local `core_dares.json` asset) and then
+  /// attempts to fetch and activate the latest configuration from the Firebase backend.
+  /// This method is called lazily when dares are first requested.
   Future<void> _initializeRemoteConfig() async {
     if (_isRemoteConfigInitialized) return;
 
@@ -42,6 +56,10 @@ class DareService {
     _isRemoteConfigInitialized = true;
   }
 
+  /// Parses a JSON string containing a list of dares into a `List<Dare>`.
+  ///
+  /// - [jsonString]: The JSON string to parse.
+  /// Returns a list of [Dare] objects. Returns an empty list if parsing fails.
   Future<List<Dare>> _parseDares(String jsonString) {
     try {
       final List<dynamic> jsonList = json.decode(jsonString) as List<dynamic>;
@@ -80,7 +98,7 @@ class DareService {
       print('Remote Config instance is null. Falling back to local asset.');
       daresJsonString = await rootBundle.loadString('assets/dares/core_dares.json');
     }
-    
+
     _cachedCoreDares = await _parseDares(daresJsonString);
     if (loadedFromRemote && _cachedCoreDares!.isEmpty) {
         // If remote config was supposed to be used but parsing failed or it was empty JSON array,
@@ -91,8 +109,13 @@ class DareService {
     return _cachedCoreDares!;
   }
 
-
-  // Method to get a single random dare, potentially filtered
+  /// Retrieves a random dare, optionally filtered by the given [criteria].
+  ///
+  /// This is the primary public method for accessing dares. It ensures dares are loaded
+  /// (from Remote Config or local assets) and then selects a suitable dare.
+  ///
+  /// - [criteria]: Optional [FilterCriteria] to narrow down the selection of dares.
+  /// Returns a [Dare] object or `null` if no dares are available or match the criteria.
   Future<Dare?> getRandomDare({FilterCriteria? criteria}) async {
     final allDares = await _loadCoreDaresIfNeeded();
     if (allDares.isEmpty) return null;

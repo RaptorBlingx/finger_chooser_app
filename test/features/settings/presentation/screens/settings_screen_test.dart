@@ -51,15 +51,15 @@ void main() {
 
     testWidgets('Tapping "English" button sets locale to English', (WidgetTester tester) async {
       // Ensure initial locale is not English for a change to be detected
-      await localeNotifier.setLocale(const Locale('ar', '')); 
+      await localeNotifier.setLocale(const Locale('ar', ''));
       await pumpSettingsScreen(tester, container);
-      
+
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
       await tester.tap(find.text(localizations.englishLanguage));
       await tester.pumpAndSettle(); // Allow UI to rebuild
 
       expect(container.read(localeNotifierProvider), const Locale('en', ''));
-      
+
       // Verify UI indication (e.g. button style - more complex and brittle)
       // Example: Check if the English button's background color changed as expected
       final englishButton = tester.widget<ElevatedButton>(find.text(localizations.englishLanguage));
@@ -69,7 +69,7 @@ void main() {
     testWidgets('Tapping "Arabic" button sets locale to Arabic', (WidgetTester tester) async {
       // Initial locale is English by default in LocaleNotifier
       await pumpSettingsScreen(tester, container);
-      
+
       final localizations = await AppLocalizations.delegate.load(const Locale('en')); // Load any locale for keys
       await tester.tap(find.text(localizations.arabicLanguage));
       await tester.pumpAndSettle();
@@ -83,7 +83,7 @@ void main() {
     testWidgets('UI correctly indicates current language (English)', (WidgetTester tester) async {
       await localeNotifier.setLocale(const Locale('en', ''));
       await pumpSettingsScreen(tester, container);
-      
+
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
       final englishButton = tester.widget<ElevatedButton>(find.text(localizations.englishLanguage));
       final arabicButton = tester.widget<ElevatedButton>(find.text(localizations.arabicLanguage));
@@ -99,7 +99,7 @@ void main() {
       final localizations = await AppLocalizations.delegate.load(const Locale('en')); // Keys are lang-agnostic
       final englishButton = tester.widget<ElevatedButton>(find.text(localizations.englishLanguage));
       final arabicButton = tester.widget<ElevatedButton>(find.text(localizations.arabicLanguage));
-      
+
       expect(arabicButton.style?.backgroundColor?.resolve({}), equals(Theme.of(tester.element(find.text(localizations.arabicLanguage))).colorScheme.primary));
       expect(englishButton.style?.backgroundColor?.resolve({}), equals(Colors.grey));
     });
