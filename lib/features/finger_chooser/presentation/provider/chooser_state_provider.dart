@@ -26,15 +26,20 @@ const int kMinFingersToStart = 2;
 /// - Handling false starts.
 /// - Resetting the game state.
 class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
+  /// Service to fetch dare objects.
+  final DareService _dareService;
+
   /// Initializes the notifier with a default [ChooserScreenState].
-  ChooserStateNotifier() : super(ChooserScreenState(countdownSecondsRemaining: kCountdownSeconds));
+  /// Optionally accepts a [DareService] for testing or custom implementations.
+  ChooserStateNotifier({DareService? dareService})
+      : _dareService = dareService ?? DareService(), // Use provided or create new
+        super(ChooserScreenState(countdownSecondsRemaining: kCountdownSeconds));
 
   /// Timer for the countdown. Null if no countdown is active.
   Timer? _countdownTimer;
   /// Random number generator for selecting a winner and dares.
   final Random _random = Random();
-  /// Service to fetch dare objects.
-  final DareService _dareService = DareService();
+  // _dareService is now initialized in the constructor
 
   /// Sets a list of custom dares to be used for the game.
   ///
@@ -194,8 +199,16 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
         // Assuming Dare model can be created with just text, or adjust as needed
         // If Dare needs an ID or other fields, those might need to be mocked or handled.
         // For simplicity, creating a Dare object with the text.
-        // The ID 'custom' is arbitrary. Category might also be 'custom'.
-        selectedDare = Dare(id: 'custom_${_random.nextInt(10000)}', text: randomDareText, category: 'Custom');
+        selectedDare = Dare(
+            id: 'custom_${_random.nextInt(10000)}',
+            textEn: randomDareText, // Use textEn
+            // Provide default values for other required fields:
+            groupType: ['any'],
+            place: ['any'],
+            gender: ['any'],
+            intensity: 'mild',
+            minPlayers: 1
+        );
       } else {
         // Use DareService for default dares
         // TODO: When Custom Play wizard exists, construct FilterCriteria based on user choices.
@@ -208,7 +221,16 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
     } catch (e) {
       print("Error selecting dare: $e");
       // Optionally set a default/error dare or handle error state
-      selectedDare = const Dare(id: 'error', text: 'Oops! Could not load a dare.', category: 'Error');
+      selectedDare = const Dare(
+            id: 'error_dare', // Ensure ID is unique if many errors occur, or keep simple
+            textEn: 'Oops! Could not load a dare. Please try again.', // Use textEn
+            // Provide default values for other required fields:
+            groupType: ['any'],
+            place: ['any'],
+            gender: ['any'],
+            intensity: 'mild',
+            minPlayers: 1
+        );
     }
     
     if (!mounted) return; 

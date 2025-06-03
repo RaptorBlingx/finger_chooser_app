@@ -63,16 +63,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> { // State clas
                 ElevatedButton(
                   onPressed: () => _handleLanguageChange(const Locale('en', '')),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: currentLocale.languageCode == 'en' ? Theme.of(context).colorScheme.primary : Colors.grey,
+                    // If currentLocale is null, treat 'en' as selected by default for UI indication,
+                    // or fallback to the actual device/fallback locale.
+                    // For button styling, assuming 'en' if null is a simple visual default.
+                    backgroundColor: (currentLocale?.languageCode ?? 'en') == 'en' ? Theme.of(context).colorScheme.primary : Colors.grey,
                   ),
-                  child: Text(localizations.englishLanguage, style: TextStyle(color: currentLocale.languageCode == 'en' ? Theme.of(context).colorScheme.onPrimary : Colors.white)),
+                  child: Text(localizations.englishLanguage, style: TextStyle(color: (currentLocale?.languageCode ?? 'en') == 'en' ? Theme.of(context).colorScheme.onPrimary : Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () => _handleLanguageChange(const Locale('ar', '')),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: currentLocale.languageCode == 'ar' ? Theme.of(context).colorScheme.primary : Colors.grey,
+                    backgroundColor: currentLocale?.languageCode == 'ar' ? Theme.of(context).colorScheme.primary : Colors.grey,
                   ),
-                  child: Text(localizations.arabicLanguage, style: TextStyle(color: currentLocale.languageCode == 'ar' ? Theme.of(context).colorScheme.onPrimary : Colors.white)),
+                  child: Text(localizations.arabicLanguage, style: TextStyle(color: currentLocale?.languageCode == 'ar' ? Theme.of(context).colorScheme.onPrimary : Colors.white)),
                 ),
               ],
             ),

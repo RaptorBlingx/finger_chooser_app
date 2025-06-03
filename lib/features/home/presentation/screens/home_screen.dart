@@ -13,7 +13,7 @@ import 'package:firebase_analytics/firebase_analytics.dart'; // Added Firebase A
 // Note: Duplicate FlutterLogo import was removed by hand as the tool might not catch it.
 // If it was `import 'package:flutter/material.dart' as fm;` then it would be fine.
 import '../../../finger_chooser/presentation/screens/chooser_screen.dart';
-import 'package:dare_n_share_app/features/custom_play/presentation/screens/custom_play_wizard_screen.dart';
+import 'package:finger_chooser_app/features/custom_play/presentation/screens/custom_play_wizard_screen.dart'; // Corrected package name
 import '../../../settings/presentation/screens/settings_screen.dart';
 import '../../../store/presentation/screens/store_screen.dart';
 

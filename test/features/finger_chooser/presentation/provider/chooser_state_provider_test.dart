@@ -33,8 +33,8 @@ void main() {
     // For a robust test, DareService should be injectable.
     // However, the _selectWinner method directly instantiates DareService.
     // We will focus on testing other aspects and how it handles custom dares.
-
-    notifier = ChooserStateNotifier();
+    // NOW: We pass the mockDareService to the notifier.
+    notifier = ChooserStateNotifier(dareService: mockDareService);
 
     // Mock HapticFeedback
     SystemChannels.platform.setMockMethodCallHandler((MethodCall methodCall) async {
@@ -119,37 +119,50 @@ void main() {
 
         // Mock getRandomDare for _selectWinner part
         when(mockDareService.getRandomDare(criteria: anyNamed('criteria')))
-            .thenAnswer((_) async => const Dare(id: 'd1', textEn: 'Test Dare', category: 'test', gender: [], groupType: [], place: [], intensity: "mild", minPlayers: 1));
+            .thenAnswer((_) async => const Dare(
+                id: 'd1_mocked',
+                textEn: 'Test Dare from Mock',
+                groupType: ['test_group'],
+                place: ['test_place'],
+                gender: ['test_gender'],
+                intensity: 'test_mild',
+                minPlayers: 1
+            ));
 
         notifier.startCountdown();
 
-        // Wait for countdown to finish
-        // Due to the direct instantiation of DareService, we can't mock it for THIS notifier instance easily.
-        // The test for _selectWinner will be limited.
         await Future.delayed(Duration(seconds: kCountdownSeconds + 1));
 
         expect(notifier.debugState.gamePhase, GamePhase.selectionComplete);
         expect(notifier.debugState.selectedFinger, isNotNull);
-        // Dare selection part is harder to test without injecting DareService mock
+        // Now that DareService is mocked, we can check the dare text
+        expect(notifier.debugState.selectedDare, isNotNull);
+        expect(notifier.debugState.selectedDare!.textEn, 'Test Dare from Mock');
       });
     });
 
     group('Winner Selection:', () {
-      test('_selectWinner selects a finger and sets game phase to selectionComplete', () async {
+      test('_selectWinner selects a finger, gets dare from service, and sets game phase', () async {
         notifier.addFinger(const PointerDownEvent(pointer: 1, position: Offset(10, 10)));
         notifier.addFinger(const PointerDownEvent(pointer: 2, position: Offset(20, 20)));
 
-        // Directly call _selectWinner (making it public for test or using a helper)
-        // This is tricky as _selectWinner is private. We test it via countdown completion.
-        // As noted, DareService interaction is hard to mock here.
-        // We'll focus on the custom dare aspect.
+        when(mockDareService.getRandomDare(criteria: anyNamed('criteria')))
+             .thenAnswer((_) async => const Dare(
+                id: 'd_from_service',
+                textEn: 'Dare from Service',
+                groupType: ['any'], place: ['any'], gender: ['any'], intensity: 'mild', minPlayers: 1
+            ));
 
-        notifier.startCountdown();
-        await Future.delayed(Duration(seconds: kCountdownSeconds + 1));
+        notifier.startCountdown(); // This will eventually call _selectWinner
+        await Future.delayed(Duration(seconds: kCountdownSeconds + 2)); // Ensure time for async ops
 
         expect(notifier.debugState.gamePhase, GamePhase.selectionComplete);
         expect(notifier.debugState.selectedFinger, isNotNull);
-        expect(log.where((call) => call.method == 'HapticFeedback.vibrate' && call.arguments == 'HapticFeedbackType.heavyImpact'), isEmpty); //This is now done in the Notifier.
+        expect(notifier.debugState.selectedDare, isNotNull);
+        expect(notifier.debugState.selectedDare!.textEn, 'Dare from Service');
+        // Haptic feedback check (heavyImpact) is in the ChooserStateNotifier itself.
+        // Verifying platform channel calls here confirms it was triggered.
+        expect(log.any((call) => call.method == 'HapticFeedback.vibrate' && call.arguments == 'HapticFeedbackType.heavyImpact'), isFalse); //This was changed to use HapticFeedback.heavyImpact() which has its own method channel call
       });
 
       test('_selectWinner uses custom dares if available', () async {
@@ -158,13 +171,16 @@ void main() {
         notifier.addFinger(const PointerDownEvent(pointer: 2, position: Offset(20, 20)));
 
         notifier.startCountdown();
-        await Future.delayed(Duration(seconds: kCountdownSeconds + 1));
+        await Future.delayed(Duration(seconds: kCountdownSeconds + 2)); // Ensure time for async ops
 
         expect(notifier.debugState.gamePhase, GamePhase.selectionComplete);
         expect(notifier.debugState.selectedFinger, isNotNull);
         expect(notifier.debugState.selectedDare, isNotNull);
         expect(['Custom Dare 1', 'Custom Dare 2'].contains(notifier.debugState.selectedDare!.textEn), isTrue);
-        expect(notifier.debugState.selectedDare!.category, 'Custom');
+        // Check if the ID starts with 'custom_' as per our Dare creation logic for custom dares
+        expect(notifier.debugState.selectedDare!.id.startsWith('custom_'), isTrue);
+        // Verify that DareService was NOT called
+        verifyNever(mockDareService.getRandomDare(criteria: anyNamed('criteria')));
       });
     });
 
