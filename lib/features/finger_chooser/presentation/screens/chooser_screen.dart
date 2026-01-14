@@ -354,7 +354,6 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with TickerProvid
 
   Widget _buildPhaseIcon(GamePhase phase) {
     IconData icon;
-    Color color = Colors.white;
     
     switch (phase) {
       case GamePhase.waitingForFingers:
@@ -380,7 +379,7 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with TickerProvid
       child: Icon(
         icon,
         size: 32,
-        color: color,
+        color: Colors.white,
       ),
     );
   }
@@ -532,15 +531,16 @@ class FingerPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint fingerPaint = Paint()..style = PaintingStyle.fill;
-    
-    final Paint highlightPaint = Paint()
+    // Reusable Paint objects (created once per paint call)
+    final fingerPaint = Paint()..style = PaintingStyle.fill;
+    final highlightPaint = Paint()
       ..style = PaintingStyle.stroke
       ..color = Colors.white;
-    
-    final Paint glowPaint = Paint()
+    final glowPaint = Paint()
       ..style = PaintingStyle.fill
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 15);
+    final innerHighlightPaint = Paint()..style = PaintingStyle.fill;
+    final particlePaint = Paint()..style = PaintingStyle.fill;
     
     const double baseRadius = 35.0;
     const double baseHighlightStrokeWidth = 6.0;
@@ -550,29 +550,30 @@ class FingerPainter extends CustomPainter {
       if (selectedFinger != null && finger.id == selectedFinger!.id) continue;
       
       fingerPaint.color = finger.color;
+      glowPaint.color = finger.color.withOpacity(0.3);
       
       // Draw shadow/glow
-      glowPaint.color = finger.color.withOpacity(0.3);
       canvas.drawCircle(finger.position, baseRadius + 8, glowPaint);
       
       // Draw main finger circle
       canvas.drawCircle(finger.position, baseRadius, fingerPaint);
       
       // Draw inner highlight
-      final Paint innerHighlight = Paint()
-        ..color = Colors.white.withOpacity(0.3)
-        ..style = PaintingStyle.fill;
+      innerHighlightPaint.color = Colors.white.withOpacity(0.3);
       canvas.drawCircle(
         Offset(finger.position.dx - 8, finger.position.dy - 8),
         baseRadius * 0.3,
-        innerHighlight,
+        innerHighlightPaint,
       );
     }
 
     // Draw selected finger last (on top)
     if (selectedFinger != null) {
       final fingerIndex = fingers.indexWhere((f) => f.id == selectedFinger!.id);
-      if (fingerIndex == -1) return; // Safety check: finger not found
+      if (fingerIndex == -1) {
+        // Selected finger not found - this shouldn't happen but we handle it gracefully
+        return;
+      }
       
       final finger = fingers[fingerIndex];
       fingerPaint.color = finger.color;
@@ -587,35 +588,27 @@ class FingerPainter extends CustomPainter {
       final double currentHighlightRadius = currentDisplayRadius + (baseHighlightStrokeWidth / 2);
       final double currentHighlightStroke = baseHighlightStrokeWidth * selectionScale;
       
-      canvas.drawCircle(
-        finger.position,
-        currentHighlightRadius,
-        highlightPaint..strokeWidth = currentHighlightStroke,
-      );
+      highlightPaint.strokeWidth = currentHighlightStroke;
+      canvas.drawCircle(finger.position, currentHighlightRadius, highlightPaint);
       
       // Draw main finger circle
       canvas.drawCircle(finger.position, currentDisplayRadius, fingerPaint);
       
       // Draw inner highlight
-      final Paint innerHighlight = Paint()
-        ..color = Colors.white.withOpacity(0.4)
-        ..style = PaintingStyle.fill;
+      innerHighlightPaint.color = Colors.white.withOpacity(0.4);
       canvas.drawCircle(
         Offset(finger.position.dx - 10 * selectionScale, finger.position.dy - 10 * selectionScale),
         currentDisplayRadius * 0.3,
-        innerHighlight,
+        innerHighlightPaint,
       );
       
       // Draw particle effects around selected finger
+      particlePaint.color = Colors.white.withOpacity(0.7);
       for (int i = 0; i < _particleAngles.length; i++) {
         final angle = _particleAngles[i] + (selectionScale * math.pi / 4);
         final distance = currentDisplayRadius + 25 * selectionScale;
         final particleX = finger.position.dx + math.cos(angle) * distance;
         final particleY = finger.position.dy + math.sin(angle) * distance;
-        
-        final Paint particlePaint = Paint()
-          ..color = Colors.white.withOpacity(0.7)
-          ..style = PaintingStyle.fill;
         
         canvas.drawCircle(
           Offset(particleX, particleY),
