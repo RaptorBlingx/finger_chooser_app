@@ -209,7 +209,7 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with TickerProvid
                         _buildPhaseIcon(chooserState.gamePhase),
                         const SizedBox(height: 12),
                         Text(
-                          getInstructionText(),
+                          _getInstructionText(chooserState, localizations, currentIsQuickPlayMode),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
@@ -423,24 +423,24 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with TickerProvid
     }
   }
 
-  String getInstructionText() {
-    final chooserState = ref.watch(chooserStateProvider);
-    final localizations = AppLocalizations.of(context)!;
-    final currentIsQuickPlayMode = widget.isQuickPlayMode;
-
-    switch (chooserState.gamePhase) {
+  String _getInstructionText(
+    ChooserScreenState state,
+    AppLocalizations localizations,
+    bool isQuickPlayMode,
+  ) {
+    switch (state.gamePhase) {
       case GamePhase.waitingForFingers:
-        return chooserState.activeFingers.isEmpty
+        return state.activeFingers.isEmpty
             ? localizations.placeFingersPrompt
-            : "${chooserState.activeFingers.length} ${chooserState.activeFingers.length == 1 ? 'finger' : 'fingers'} on screen. Need at least $kMinFingersToStart.";
+            : "${state.activeFingers.length} ${state.activeFingers.length == 1 ? 'finger' : 'fingers'} on screen. Need at least $kMinFingersToStart.";
       case GamePhase.countdownActive:
-        return "Get ready! Choosing in ${chooserState.countdownSecondsRemaining}...";
+        return "Get ready! Choosing in ${state.countdownSecondsRemaining}...";
       case GamePhase.selectionComplete:
-        if (chooserState.selectedFinger != null) {
-          if (currentIsQuickPlayMode) {
-            return "🎉 Finger ${chooserState.selectedFinger!.id} wins!";
+        if (state.selectedFinger != null) {
+          if (isQuickPlayMode) {
+            return "🎉 Finger ${state.selectedFinger!.id} wins!";
           } else {
-            return "🎊 ${localizations.appTitle}: Finger ${chooserState.selectedFinger!.id} is chosen!";
+            return "🎊 ${localizations.appTitle}: Finger ${state.selectedFinger!.id} is chosen!";
           }
         }
         return "Selection complete!";
@@ -514,7 +514,19 @@ class _StyledButton extends StatelessWidget {
 class FingerPainter extends CustomPainter {
   final List<Finger> fingers;
   final Finger? selectedFinger;
-  final double selectionScale; 
+  final double selectionScale;
+  
+  // Pre-calculated particle angles for better performance
+  static const List<double> _particleAngles = [
+    0.0,
+    math.pi / 4,
+    math.pi / 2,
+    3 * math.pi / 4,
+    math.pi,
+    5 * math.pi / 4,
+    3 * math.pi / 2,
+    7 * math.pi / 4,
+  ];
 
   FingerPainter(this.fingers, this.selectedFinger, this.selectionScale);
 
@@ -559,7 +571,10 @@ class FingerPainter extends CustomPainter {
 
     // Draw selected finger last (on top)
     if (selectedFinger != null) {
-      final finger = fingers.firstWhere((f) => f.id == selectedFinger!.id);
+      final fingerIndex = fingers.indexWhere((f) => f.id == selectedFinger!.id);
+      if (fingerIndex == -1) return; // Safety check: finger not found
+      
+      final finger = fingers[fingerIndex];
       fingerPaint.color = finger.color;
       
       final double currentDisplayRadius = baseRadius * selectionScale;
@@ -592,8 +607,8 @@ class FingerPainter extends CustomPainter {
       );
       
       // Draw particle effects around selected finger
-      for (int i = 0; i < 8; i++) {
-        final angle = (i * math.pi * 2 / 8) + (selectionScale * math.pi / 4);
+      for (int i = 0; i < _particleAngles.length; i++) {
+        final angle = _particleAngles[i] + (selectionScale * math.pi / 4);
         final distance = currentDisplayRadius + 25 * selectionScale;
         final particleX = finger.position.dx + math.cos(angle) * distance;
         final particleY = finger.position.dy + math.sin(angle) * distance;
