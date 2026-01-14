@@ -1,13 +1,75 @@
 // lib/features/home/presentation/screens/home_screen.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // For localized text
-import '../../../finger_chooser/presentation/screens/chooser_screen.dart'; // To navigate to ChooserScreen
-// Import other screens as they are created (e.g., SettingsScreen, StoreScreen)
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../finger_chooser/presentation/screens/chooser_screen.dart';
+import '../../../store/presentation/screens/store_screen.dart';
+import '../../../../services/admob_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  static const String routeName = '/home'; // Optional: for named routing later
+  static const String routeName = '/home';
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final AudioPlayer _buttonClickPlayer = AudioPlayer();
+  final AdMobService _adMobService = AdMobService();
+
+  BannerAd? _bannerAd;
+  bool _isBannerAdReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBannerAd();
+  }
+
+  void _loadBannerAd() {
+    _bannerAd = _adMobService.createBannerAd(
+      onAdLoaded: (ad) {
+        setState(() {
+          _isBannerAdReady = true;
+        });
+      },
+      onAdFailedToLoad: (ad, error) {
+        debugPrint('Banner ad failed to load: $error');
+        ad.dispose();
+      },
+    );
+    _bannerAd?.load();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    _buttonClickPlayer.dispose();
+    super.dispose();
+  }
+
+  void _playButtonClickSound() {
+    _buttonClickPlayer.play(AssetSource('sounds/button_click.mp3'));
+  }
+
+  void _handleNavigation(BuildContext context, Widget screen, {String? eventName, Map<String, Object>? parameters}) {
+    HapticFeedback.selectionClick();
+    _playButtonClickSound();
+
+    if (eventName != null) {
+      FirebaseAnalytics.instance.logEvent(name: eventName, parameters: parameters);
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,88 +77,83 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations.appTitle), // Or a more specific "Home" title
-        // Potentially add actions like settings icon later
-        // actions: [ 
-        //   IconButton(
-        //     icon: const Icon(Icons.settings),
-        //     onPressed: () {
-        //       // Navigate to SettingsScreen
-        //     },
-        //   ),
-        // ],
+        title: Text(localizations.appTitle),
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch, // Make buttons stretch
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // TODO: Add App Logo/Branding here if desired
-
+              const FlutterLogo(size: 80.0),
+              const SizedBox(height: 30),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   textStyle: const TextStyle(fontSize: 18),
                 ),
                 onPressed: () {
-                  // Navigate to ChooserScreen for "Party Play" (with dares)
-                  // We will pass a parameter to distinguish modes later
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ChooserScreen(
-                         isQuickPlayMode: false, // Add this parameter to ChooserScreen later
-                      ),
-                    ),
+                  _handleNavigation(
+                    context,
+                    const ChooserScreen(isQuickPlayMode: false),
+                    eventName: 'party_play_opened',
                   );
                 },
-                // For now, let's call the default mode "Party Play"
-                child: const Text("🎉 Party Play (with Dares)"), 
+                child: const Text("🎉 Party Play (with Dares)"),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   textStyle: const TextStyle(fontSize: 18),
-                  // backgroundColor: Colors.lightBlueAccent, // Example different color
                 ),
                 onPressed: () {
-                  // Navigate to ChooserScreen for "Quick Pick" (no dares)
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ChooserScreen(
-                         isQuickPlayMode: true, // Add this parameter to ChooserScreen later
-                      ),
-                    ),
+                  _handleNavigation(
+                    context,
+                    const ChooserScreen(isQuickPlayMode: true),
+                    eventName: 'quick_pick_opened',
                   );
                 },
                 child: const Text("👆 Quick Pick (Fingers Only)"),
               ),
               const SizedBox(height: 20),
-              OutlinedButton( // Example for a less prominent button
+              OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   textStyle: const TextStyle(fontSize: 18),
                 ),
                 onPressed: () {
-                  // Placeholder for Custom Play Wizard
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Custom Play Wizard - Coming Soon!")),
                   );
                 },
                 child: const Text("🛠️ Custom Play (Wizard)"),
               ),
-              // TODO: Add buttons for "Store/Packs" and "Settings" later
-              // const SizedBox(height: 20),
-              // TextButton(
-              //   onPressed: () { /* Navigate to Store */ },
-              //   child: const Text("🛍️ Store / Dare Packs"),
-              // ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.storefront_outlined),
+                label: Text(localizations.darePacksButtonLabel),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  textStyle: const TextStyle(fontSize: 18),
+                ),
+                onPressed: () => _handleNavigation(
+                  context,
+                  const StoreScreen(),
+                  eventName: 'store_opened',
+                ),
+              ),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: _isBannerAdReady && _bannerAd != null
+          ? SizedBox(
+              height: _bannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd!),
+            )
+          : null,
     );
   }
 }

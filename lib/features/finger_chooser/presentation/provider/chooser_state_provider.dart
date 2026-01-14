@@ -9,7 +9,6 @@ import 'package:flutter/services.dart'; // For HapticFeedback
 
 import '../../../../models/dare_model.dart';      // Import Dare model
 import '../../../../services/dare_service.dart'; // Import DareService
-import '../../../../models/filter_criteria_model.dart';
 
 const int kCountdownSeconds = 5; // Changed to kCamelCase
 const int kMinFingersToStart = 2;  // Changed to kCamelCase

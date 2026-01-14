@@ -4,5 +4,10 @@
   "placeFingersPrompt": "ضع الأصابع على الشاشة!",
   "selectButton": "اختر واحد",
   "settings": "الإعدادات",
-  "manageDares": "إدارة التحديات"
+  "manageDares": "إدارة التحديات",
+  "darePacksButtonLabel": "حزم التحديات",
+  "storeScreenTitle": "المتجر",
+  "playAgainButtonChooser": "العب مرة أخرى",
+  "tryAgainButtonChooser": "حاول مرة أخرى",
+  "getButtonLabel": "احصل"
 }

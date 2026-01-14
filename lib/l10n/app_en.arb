@@ -7,5 +7,10 @@
   "placeFingersPrompt": "Place fingers on the screen!",
   "selectButton": "Select One",
   "settings": "Settings",
-  "manageDares": "Manage Dares"
+  "manageDares": "Manage Dares",
+  "darePacksButtonLabel": "Dare Packs",
+  "storeScreenTitle": "Store",
+  "playAgainButtonChooser": "Play Again",
+  "tryAgainButtonChooser": "Try Again",
+  "getButtonLabel": "Get"
 }

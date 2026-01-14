@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.finger_chooser_app"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35  // Updated to 35 for audioplayers_android compatibility
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
