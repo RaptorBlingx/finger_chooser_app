@@ -132,129 +132,7 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with TickerProvid
         }
       });
 
-
-  List<Color> _getGradientColors(GamePhase phase) {
-    switch (phase) {
-      case GamePhase.waitingForFingers:
-        return [
-          const Color(0xFF667eea),
-          const Color(0xFF764ba2),
-        ];
-      case GamePhase.countdownActive:
-        return [
-          const Color(0xFFf093fb),
-          const Color(0xFFf5576c),
-        ];
-      case GamePhase.selectionComplete:
-        return [
-          const Color(0xFF4facfe),
-          const Color(0xFF00f2fe),
-        ];
-      case GamePhase.falseStart:
-        return [
-          const Color(0xFFfa709a),
-          const Color(0xFFfee140),
-        ];
-    }
-  }
-
-  Widget _buildPhaseIcon(GamePhase phase) {
-    IconData icon;
-    Color color = Colors.white;
-    
-    switch (phase) {
-      case GamePhase.waitingForFingers:
-        icon = Icons.touch_app;
-        break;
-      case GamePhase.countdownActive:
-        icon = Icons.timer;
-        break;
-      case GamePhase.selectionComplete:
-        icon = Icons.celebration;
-        break;
-      case GamePhase.falseStart:
-        icon = Icons.warning_rounded;
-        break;
-    }
-    
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        icon,
-        size: 32,
-        color: color,
-      ),
-    );
-  }
-
-  Widget _buildActionButton(
-    ChooserScreenState state,
-    ChooserStateNotifier notifier,
-    AppLocalizations localizations,
-  ) {
-    if (state.gamePhase == GamePhase.selectionComplete) {
-      return _StyledButton(
-        onPressed: () {
-          _animationController.stop();
-          _animationController.reset();
-          notifier.resetGame();
-        },
-        icon: Icons.refresh_rounded,
-        label: "Play Again",
-        backgroundColor: Colors.white,
-        textColor: const Color(0xFF667eea),
-      );
-    } else if (state.gamePhase == GamePhase.falseStart) {
-      return _StyledButton(
-        onPressed: notifier.resetGame,
-        icon: Icons.replay,
-        label: "Try Again",
-        backgroundColor: Colors.white,
-        textColor: const Color(0xFFfa709a),
-      );
-    } else {
-      return _StyledButton(
-        onPressed: state.canStartCountdown && state.gamePhase == GamePhase.waitingForFingers
-            ? notifier.startCountdown
-            : null,
-        icon: Icons.play_arrow_rounded,
-        label: localizations.selectButton,
-        backgroundColor: Colors.white,
-        textColor: const Color(0xFF667eea),
-      );
-    }
-  }
-
-  String getInstructionText() {
-    final chooserState = ref.watch(chooserStateProvider);
-    final localizations = AppLocalizations.of(context)!;
-    final currentIsQuickPlayMode = widget.isQuickPlayMode;
-
-    switch (chooserState.gamePhase) {
-      case GamePhase.waitingForFingers:
-        return chooserState.activeFingers.isEmpty
-            ? localizations.placeFingersPrompt
-            : "${chooserState.activeFingers.length} ${chooserState.activeFingers.length == 1 ? 'finger' : 'fingers'} on screen. Need at least $kMinFingersToStart.";
-      case GamePhase.countdownActive:
-        return "Get ready! Choosing in ${chooserState.countdownSecondsRemaining}...";
-      case GamePhase.selectionComplete:
-        if (chooserState.selectedFinger != null) {
-          if (currentIsQuickPlayMode) {
-            return "🎉 Finger ${chooserState.selectedFinger!.id} wins!";
-          } else {
-            return "🎊 ${localizations.appTitle}: Finger ${chooserState.selectedFinger!.id} is chosen!";
-          }
-        }
-        return "Selection complete!";
-      case GamePhase.falseStart:
-        return "⚠️ False Start! Keep all fingers down!";
-    }
-  }
-}
+    return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -447,6 +325,128 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with TickerProvid
         ),
       ),
     );
+  }
+
+  List<Color> _getGradientColors(GamePhase phase) {
+    switch (phase) {
+      case GamePhase.waitingForFingers:
+        return [
+          const Color(0xFF667eea),
+          const Color(0xFF764ba2),
+        ];
+      case GamePhase.countdownActive:
+        return [
+          const Color(0xFFf093fb),
+          const Color(0xFFf5576c),
+        ];
+      case GamePhase.selectionComplete:
+        return [
+          const Color(0xFF4facfe),
+          const Color(0xFF00f2fe),
+        ];
+      case GamePhase.falseStart:
+        return [
+          const Color(0xFFfa709a),
+          const Color(0xFFfee140),
+        ];
+    }
+  }
+
+  Widget _buildPhaseIcon(GamePhase phase) {
+    IconData icon;
+    Color color = Colors.white;
+    
+    switch (phase) {
+      case GamePhase.waitingForFingers:
+        icon = Icons.touch_app;
+        break;
+      case GamePhase.countdownActive:
+        icon = Icons.timer;
+        break;
+      case GamePhase.selectionComplete:
+        icon = Icons.celebration;
+        break;
+      case GamePhase.falseStart:
+        icon = Icons.warning_rounded;
+        break;
+    }
+    
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.2),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        icon,
+        size: 32,
+        color: color,
+      ),
+    );
+  }
+
+  Widget _buildActionButton(
+    ChooserScreenState state,
+    ChooserStateNotifier notifier,
+    AppLocalizations localizations,
+  ) {
+    if (state.gamePhase == GamePhase.selectionComplete) {
+      return _StyledButton(
+        onPressed: () {
+          _animationController.stop();
+          _animationController.reset();
+          notifier.resetGame();
+        },
+        icon: Icons.refresh_rounded,
+        label: "Play Again",
+        backgroundColor: Colors.white,
+        textColor: const Color(0xFF667eea),
+      );
+    } else if (state.gamePhase == GamePhase.falseStart) {
+      return _StyledButton(
+        onPressed: notifier.resetGame,
+        icon: Icons.replay,
+        label: "Try Again",
+        backgroundColor: Colors.white,
+        textColor: const Color(0xFFfa709a),
+      );
+    } else {
+      return _StyledButton(
+        onPressed: state.canStartCountdown && state.gamePhase == GamePhase.waitingForFingers
+            ? notifier.startCountdown
+            : null,
+        icon: Icons.play_arrow_rounded,
+        label: localizations.selectButton,
+        backgroundColor: Colors.white,
+        textColor: const Color(0xFF667eea),
+      );
+    }
+  }
+
+  String getInstructionText() {
+    final chooserState = ref.watch(chooserStateProvider);
+    final localizations = AppLocalizations.of(context)!;
+    final currentIsQuickPlayMode = widget.isQuickPlayMode;
+
+    switch (chooserState.gamePhase) {
+      case GamePhase.waitingForFingers:
+        return chooserState.activeFingers.isEmpty
+            ? localizations.placeFingersPrompt
+            : "${chooserState.activeFingers.length} ${chooserState.activeFingers.length == 1 ? 'finger' : 'fingers'} on screen. Need at least $kMinFingersToStart.";
+      case GamePhase.countdownActive:
+        return "Get ready! Choosing in ${chooserState.countdownSecondsRemaining}...";
+      case GamePhase.selectionComplete:
+        if (chooserState.selectedFinger != null) {
+          if (currentIsQuickPlayMode) {
+            return "🎉 Finger ${chooserState.selectedFinger!.id} wins!";
+          } else {
+            return "🎊 ${localizations.appTitle}: Finger ${chooserState.selectedFinger!.id} is chosen!";
+          }
+        }
+        return "Selection complete!";
+      case GamePhase.falseStart:
+        return "⚠️ False Start! Keep all fingers down!";
+    }
   }
 }
 
