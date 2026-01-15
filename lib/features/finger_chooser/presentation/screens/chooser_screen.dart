@@ -108,15 +108,15 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final chooserState = ref.watch(chooserStateProvider);
-    final chooserNotifier = ref.read(chooserStateProvider.notifier);
+    final chooserState = ref.watch(chooserStateProvider(null)); // No filter criteria in basic screen
+    final chooserNotifier = ref.read(chooserStateProvider(null).notifier);
     // Determine if we are in a mode that should display dares.
     // This is true if it's not quickPlayMode OR if customDares are provided.
     final bool shouldDisplayDares = !widget.isQuickPlayMode || (widget.customDares != null && widget.customDares!.isNotEmpty);
     final bool currentIsQuickPlayModeEffective = widget.isQuickPlayMode && (widget.customDares == null || widget.customDares!.isEmpty);
 
 
-    ref.listen<ChooserScreenState>(chooserStateProvider, (previous, next) {
+    ref.listen<ChooserScreenState>(chooserStateProvider(null), (previous, next) {
       // Handle sounds and haptics based on game phase changes
       if (previous?.gamePhase != next.gamePhase) {
         if (next.gamePhase == GamePhase.countdownActive) {

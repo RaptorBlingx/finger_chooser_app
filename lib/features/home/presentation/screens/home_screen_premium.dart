@@ -7,8 +7,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../finger_chooser/presentation/screens/chooser_screen.dart';
+import '../../../finger_chooser/presentation/screens/chooser_screen_ultra.dart';
 import '../../../store/presentation/screens/store_screen_premium.dart';
+import '../../../custom_play/presentation/screens/custom_play_wizard_screen.dart';
 import '../../../../services/admob_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/gradient_button.dart';
@@ -292,7 +293,7 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
           gradient: AppTheme.primaryGradient,
           onTap: () => _handleNavigation(
             context,
-            const ChooserScreen(isQuickPlayMode: false),
+            const ChooserScreenUltra(isQuickPlayMode: false),
             eventName: 'party_play_started',
             parameters: {'mode': 'party_dares'},
           ),
@@ -308,7 +309,7 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
           gradient: AppTheme.secondaryGradient,
           onTap: () => _handleNavigation(
             context,
-            const ChooserScreen(isQuickPlayMode: true),
+            const ChooserScreenUltra(isQuickPlayMode: true),
             eventName: 'quick_pick_started',
             parameters: {'mode': 'quick_pick_fingers_only'},
           ),
@@ -391,11 +392,11 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
         Expanded(
           child: GradientButton(
             text: '🛠️ Custom',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Custom Play Wizard - Coming Soon!')),
-              );
-            },
+            onPressed: () => _handleNavigation(
+              context,
+              const CustomPlayWizardScreen(),
+              eventName: 'custom_play_wizard_opened',
+            ),
             gradient: AppTheme.accentGradient,
             height: 50,
           ).animate().fadeIn(delay: 900.ms).slideX(begin: -0.2, end: 0),

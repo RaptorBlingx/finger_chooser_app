@@ -9,12 +9,16 @@ import 'package:flutter/services.dart'; // For HapticFeedback
 
 import '../../../../models/dare_model.dart';      // Import Dare model
 import '../../../../services/dare_service.dart'; // Import DareService
+import '../../../../models/filter_criteria_model.dart'; // Import FilterCriteria
 
 const int kCountdownSeconds = 5; // Changed to kCamelCase
 const int kMinFingersToStart = 2;  // Changed to kCamelCase
 
 class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
-  ChooserStateNotifier() : super(const ChooserScreenState(countdownSecondsRemaining: kCountdownSeconds));
+  final FilterCriteria? filterCriteria;
+
+  ChooserStateNotifier({this.filterCriteria}) 
+      : super(const ChooserScreenState(countdownSecondsRemaining: kCountdownSeconds));
 
   Timer? _countdownTimer;
   final Random _random = Random();
@@ -122,22 +126,12 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
     final winnerFinger = state.activeFingers[randomIndex];
 
     Dare? selectedDare;
-    // Let's assume for now ChooserScreen always gets a selectedDare if one is found,
-    // and ChooserScreen decides whether to use it based on isQuickPlayMode.
-    // OR, we can pass isQuickPlayMode to this notifier.
-    // For now, let's keep it simple: always try to get a dare.
     
     try {
-      // TODO: When Custom Play wizard exists, construct FilterCriteria based on user choices.
-      // For now, no criteria are passed, so all dares are considered.
-      // Example of how you might use criteria later:
-      // final criteria = FilterCriteria(playerCount: state.activeFingers.length, genders: ["mixed"]);
-      // selectedDare = await _dareService.getRandomDare(criteria: criteria);
-      
-      selectedDare = await _dareService.getRandomDare(); // No criteria for now
-
+      // Use the filterCriteria passed to the notifier (from Custom Play wizard)
+      selectedDare = await _dareService.getRandomDare(criteria: filterCriteria);
     } catch (e) {
-      print("Error selecting dare: $e");
+      debugPrint("Error selecting dare: $e");
     }
     
     if (!mounted) return; 
@@ -191,6 +185,9 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
   }
 }
 
-final chooserStateProvider = StateNotifierProvider<ChooserStateNotifier, ChooserScreenState>((ref) {
-  return ChooserStateNotifier();
-});
+final chooserStateProvider = StateNotifierProvider.autoDispose
+    .family<ChooserStateNotifier, ChooserScreenState, FilterCriteria?>(
+  (ref, filterCriteria) {
+    return ChooserStateNotifier(filterCriteria: filterCriteria);
+  },
+);

@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import '../../../finger_chooser/presentation/screens/chooser_screen.dart';
+import '../../../finger_chooser/presentation/screens/chooser_screen_ultra.dart';
 import '../../../store/presentation/screens/store_screen.dart';
 import '../../../../services/admob_service.dart';
 
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   _handleNavigation(
                     context,
-                    const ChooserScreen(isQuickPlayMode: false),
+                    const ChooserScreenUltra(isQuickPlayMode: false),
                     eventName: 'party_play_opened',
                   );
                 },
@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   _handleNavigation(
                     context,
-                    const ChooserScreen(isQuickPlayMode: true),
+                    const ChooserScreenUltra(isQuickPlayMode: true),
                     eventName: 'quick_pick_opened',
                   );
                 },
