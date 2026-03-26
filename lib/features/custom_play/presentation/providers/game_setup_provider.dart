@@ -37,11 +37,8 @@ class GameSetupState {
     );
   }
 
-  bool get canProceedToStep2 => playerCount != null;
-  bool get canProceedToStep3 => canProceedToStep2 && genderMix != null;
-  bool get canProceedToStep4 => canProceedToStep3 && relationship != null;
-  bool get canProceedToStep5 => canProceedToStep4 && location != null;
-  bool get isComplete => canProceedToStep5 && loseRule != null;
+  bool get canProceedToStep2 => playerCount != null && genderMix != null && relationship != null && location != null;
+  bool get isComplete => canProceedToStep2 && loseRule != null;
 
   GameSetup toGameSetup() {
     if (!isComplete) {
@@ -62,7 +59,7 @@ class GameSetupNotifier extends StateNotifier<GameSetupState> {
   GameSetupNotifier() : super(const GameSetupState());
 
   void nextStep() {
-    if (state.currentStep < 4) {
+    if (state.currentStep < 1) {
       state = state.copyWith(currentStep: state.currentStep + 1);
     }
   }

@@ -13,7 +13,10 @@ import '../../../dare_display/presentation/screens/dare_display_screen.dart';
 import '../provider/chooser_state_provider.dart';
 import '../provider/chooser_models.dart';
 import '../../../../models/finger_model.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../models/filter_criteria_model.dart';
+import '../../../../services/stats_service.dart';
+import '../../../../services/admob_service.dart';
 
 class ChooserScreenUltra extends ConsumerStatefulWidget {
   final bool isQuickPlayMode;
@@ -69,6 +72,13 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 4),
     );
+
+    // Track game start & preload interstitial ad
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(statsServiceProvider)?.incrementGamesPlayed();
+      ref.invalidate(gamesPlayedProvider);
+      ref.read(adMobServiceProvider).preloadInterstitial();
+    });
   }
 
   @override
@@ -121,15 +131,40 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
             _pulseController.forward();
             _confettiController.play();
             _playSound('selection');
+            // Track stats
+            ref.read(statsServiceProvider)?.incrementRoundsPlayed();
+            ref.invalidate(roundsPlayedProvider);
+            if (next.selectedDare != null) {
+              ref.read(statsServiceProvider)?.incrementDaresCompleted();
+              ref.invalidate(daresCompletedProvider);
+            }
             if (!widget.isQuickPlayMode && next.selectedDare != null) {
               Future.delayed(const Duration(milliseconds: 2000), () {
                 if (mounted) {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => DareDisplayScreen(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          DareDisplayScreen(
                         selectedFinger: next.selectedFinger,
                         selectedDare: next.selectedDare,
+                        loseRule: widget.loseRule,
                       ),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale: Tween<double>(begin: 0.85, end: 1.0).animate(
+                              CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeOutCubic,
+                              ),
+                            ),
+                            child: child,
+                          ),
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 500),
                     ),
                   );
                 }
@@ -153,7 +188,7 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          widget.isQuickPlayMode ? "Quick Pick" : "Party Play",
+          widget.isQuickPlayMode ? localizations.quickPick : localizations.partyPlay,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -234,7 +269,7 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
                 numberOfParticles: 30,
                 gravity: 0.3,
                 colors: const [
-                  Colors.purple,
+                  AppTheme.primaryStart,
                   Colors.pink,
                   Colors.blue,
                   Colors.cyan,
@@ -255,21 +290,23 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
     switch (state.gamePhase) {
       case GamePhase.waitingForFingers:
         statusText = state.activeFingers.length < kMinFingersToStart
-            ? "Place ${kMinFingersToStart - state.activeFingers.length} more finger${kMinFingersToStart - state.activeFingers.length > 1 ? 's' : ''}"
-            : "Ready! Tap to start";
-        statusColor = Colors.cyanAccent;
+            ? localizations.placeMoreFingers(kMinFingersToStart - state.activeFingers.length)
+            : localizations.readyTapToStart;
+        statusColor = AppTheme.info;
         break;
       case GamePhase.countdownActive:
-        statusText = "Hold steady...";
-        statusColor = Colors.orangeAccent;
+        statusText = localizations.holdSteady;
+        statusColor = AppTheme.warning;
         break;
       case GamePhase.selectionComplete:
-        statusText = "Winner Selected! 🎉";
-        statusColor = Colors.greenAccent;
+        statusText = widget.loseRule == 'last'
+            ? localizations.lastOneStanding
+            : localizations.winnerSelected;
+        statusColor = AppTheme.success;
         break;
       case GamePhase.falseStart:
-        statusText = "False Start! Keep fingers down";
-        statusColor = Colors.redAccent;
+        statusText = localizations.falseStartMessage;
+        statusColor = AppTheme.error;
         break;
     }
 
@@ -350,13 +387,13 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
               gradient: RadialGradient(
                 colors: [
                   Colors.deepPurple.withOpacity(0.8),
-                  Colors.purple.withOpacity(0.4),
+                  AppTheme.primaryStart.withOpacity(0.4),
                   Colors.transparent,
                 ],
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.purple.withOpacity(0.6),
+                  color: AppTheme.primaryStart.withOpacity(0.6),
                   blurRadius: 40,
                   spreadRadius: 10,
                 ),
@@ -387,7 +424,7 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
                       color: Colors.white,
                       shadows: [
                         Shadow(
-                          color: Colors.purpleAccent,
+                          color: AppTheme.primaryEnd,
                           blurRadius: 20,
                         ),
                       ],
@@ -428,7 +465,7 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.purple.withOpacity(0.2),
+                color: AppTheme.primaryStart.withOpacity(0.2),
                 blurRadius: 30,
                 spreadRadius: 5,
               ),
@@ -501,7 +538,16 @@ class _ChooserScreenUltraState extends ConsumerState<ChooserScreenUltra>
               child: _buildGlassButton(
                 label: "EXIT",
                 icon: Icons.home_rounded,
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  final adService = ref.read(adMobServiceProvider);
+                  adService.showInterstitialIfReady(
+                    onDismissed: () {
+                      if (context.mounted) Navigator.of(context).pop();
+                    },
+                  ).then((shown) {
+                    if (!shown && context.mounted) Navigator.of(context).pop();
+                  });
+                },
                 gradient: const LinearGradient(
                   colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
                 ),
@@ -654,54 +700,74 @@ class UltraFingerPainter extends CustomPainter {
 // Particle painter for background animation
 class ParticlePainter extends CustomPainter {
   final double animationValue;
-  final List<Particle> particles;
 
-  ParticlePainter(this.animationValue)
-      : particles = List.generate(
-          50,
-          (i) => Particle(
-            index: i,
-            seed: i * 0.618033988749895,
-          ),
-        );
+  ParticlePainter(this.animationValue);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
+    final center = Offset(size.width / 2, size.height / 2);
+    final maxRadius = math.max(size.width, size.height) * 0.7;
 
-    for (var particle in particles) {
-      final x = (particle.seed * size.width +
-              animationValue * size.width * particle.speed) %
-          size.width;
-      final y = (particle.seed * size.height * 2) % size.height;
-      final opacity = (math.sin(animationValue * math.pi * 2 + particle.seed * 10) + 1) / 2;
+    // Draw pulsing concentric rings (radar/fingerprint style)
+    final ringPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
 
-      paint.color = particle.color.withOpacity(opacity * 0.3);
-      canvas.drawCircle(Offset(x, y), particle.size, paint);
+    for (int i = 0; i < 8; i++) {
+      final baseRadius = maxRadius * (i + 1) / 8;
+      final pulse = math.sin(animationValue * math.pi * 2 - i * 0.4) * 0.03;
+      final radius = baseRadius * (1.0 + pulse);
+      final opacity = (0.06 - i * 0.005).clamp(0.01, 0.08);
+
+      ringPaint.color = AppTheme.primaryStart.withOpacity(opacity);
+      canvas.drawCircle(center, radius, ringPaint);
+    }
+
+    // Draw expanding ripple waves (2 waves offset in phase)
+    for (int w = 0; w < 2; w++) {
+      final phase = (animationValue + w * 0.5) % 1.0;
+      final rippleRadius = maxRadius * phase;
+      final rippleOpacity = (1.0 - phase) * 0.12;
+
+      final ripplePaint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0
+        ..color = AppTheme.secondaryEnd.withOpacity(rippleOpacity);
+      canvas.drawCircle(center, rippleRadius, ripplePaint);
+    }
+
+    // Draw subtle cross-hair lines
+    final linePaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.5
+      ..color = Colors.white.withOpacity(0.03);
+
+    canvas.drawLine(
+      Offset(center.dx, 0),
+      Offset(center.dx, size.height),
+      linePaint,
+    );
+    canvas.drawLine(
+      Offset(0, center.dy),
+      Offset(size.width, center.dy),
+      linePaint,
+    );
+
+    // Draw small dots at ring intersections with cross-hairs
+    final dotPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = AppTheme.primaryStart.withOpacity(0.08);
+
+    for (int i = 0; i < 8; i++) {
+      final r = maxRadius * (i + 1) / 8;
+      canvas.drawCircle(Offset(center.dx, center.dy - r), 2, dotPaint);
+      canvas.drawCircle(Offset(center.dx, center.dy + r), 2, dotPaint);
+      canvas.drawCircle(Offset(center.dx - r, center.dy), 2, dotPaint);
+      canvas.drawCircle(Offset(center.dx + r, center.dy), 2, dotPaint);
     }
   }
 
   @override
   bool shouldRepaint(ParticlePainter oldDelegate) =>
       animationValue != oldDelegate.animationValue;
-}
-
-class Particle {
-  final int index;
-  final double seed;
-  final double size;
-  final Color color;
-  final double speed;
-
-  Particle({
-    required this.index,
-    required this.seed,
-  })  : size = 2 + (seed * 4),
-        color = [
-          Colors.purple,
-          Colors.blue,
-          Colors.cyan,
-          Colors.pink,
-        ][index % 4],
-        speed = 0.1 + (seed * 0.3);
 }

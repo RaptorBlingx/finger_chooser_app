@@ -147,18 +147,12 @@ class ChooserStateNotifier extends StateNotifier<ChooserScreenState> {
   void _handleFalseStart() {
     if (!mounted) return;
     _cancelCountdown();
+    HapticFeedback.heavyImpact();
     state = state.copyWith(
       gamePhase: GamePhase.falseStart,
-      countdownSecondsRemaining: kCountdownSeconds, 
+      countdownSecondsRemaining: kCountdownSeconds,
       clearSelectedFinger: true,
-    );
-    HapticFeedback.heavyImpact(); 
-    _cancelCountdown();
-    state = state.copyWith(
-      gamePhase: GamePhase.falseStart,
-      countdownSecondsRemaining: kCountdownSeconds, 
-      clearSelectedFinger: true,
-      clearSelectedDare: true, // Also clear dare on false start
+      clearSelectedDare: true,
     );
   }
 

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="finger_chooser_app"
+        android:label="Finger Chooser"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -31,10 +31,9 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <!-- AdMob App ID -->
-        <!-- TODO: Replace this test app ID with your real AdMob app ID before production -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-3283345858983273~6691600346"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

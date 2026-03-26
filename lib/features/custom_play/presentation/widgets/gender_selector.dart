@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class GenderSelector extends StatelessWidget {
   final String? selectedGender;
@@ -12,40 +16,49 @@ class GenderSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Gender Mix',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-        ),
-        const SizedBox(height: 32),
+          l10n.genderMix,
+          style: AppTheme.headingL,
+          textAlign: TextAlign.center,
+        ).animate().fadeIn(duration: 400.ms),
+        const SizedBox(height: AppTheme.spacingXL),
         _GenderOption(
           icon: Icons.male,
-          label: 'Boys Only',
+          label: l10n.boysOnly,
           value: 'boys',
           isSelected: selectedGender == 'boys',
-          onTap: () => onGenderSelected('boys'),
-        ),
-        const SizedBox(height: 16),
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onGenderSelected('boys');
+          },
+        ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.1, end: 0),
+        const SizedBox(height: AppTheme.spacingM),
         _GenderOption(
           icon: Icons.female,
-          label: 'Girls Only',
+          label: l10n.girlsOnly,
           value: 'girls',
           isSelected: selectedGender == 'girls',
-          onTap: () => onGenderSelected('girls'),
-        ),
-        const SizedBox(height: 16),
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onGenderSelected('girls');
+          },
+        ).animate().fadeIn(delay: 300.ms).slideX(begin: 0.1, end: 0),
+        const SizedBox(height: AppTheme.spacingM),
         _GenderOption(
           icon: Icons.people,
-          label: 'Mixed Group',
+          label: l10n.mixedGroup,
           value: 'mixed',
           isSelected: selectedGender == 'mixed',
-          onTap: () => onGenderSelected('mixed'),
-        ),
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onGenderSelected('mixed');
+          },
+        ).animate().fadeIn(delay: 400.ms).slideX(begin: 0.1, end: 0),
       ],
     );
   }
@@ -71,15 +84,28 @@ class _GenderOption extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: AppDurations.fast,
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+        padding: const EdgeInsets.symmetric(
+          vertical: AppTheme.spacingL,
+          horizontal: AppTheme.spacingL,
+        ),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(16),
+          gradient: isSelected
+              ? LinearGradient(
+                  colors: [
+                    AppTheme.primaryStart.withOpacity(0.3),
+                    AppTheme.primaryEnd.withOpacity(0.2),
+                  ],
+                )
+              : null,
+          color: isSelected ? null : AppTheme.cardBackground.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(AppTheme.radiusL),
           border: Border.all(
-            color: isSelected ? Colors.purple : Colors.white.withOpacity(0.3),
-            width: 2,
+            color: isSelected
+                ? AppTheme.primaryStart.withOpacity(0.5)
+                : Colors.white.withOpacity(0.1),
+            width: isSelected ? 2 : 1,
           ),
         ),
         child: Row(
@@ -87,15 +113,13 @@ class _GenderOption extends StatelessWidget {
             Icon(
               icon,
               size: 32,
-              color: isSelected ? Colors.purple : Colors.white,
+              color: isSelected ? AppTheme.primaryStart : AppTheme.textSecondary,
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: AppTheme.spacingM),
             Text(
               label,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.purple : Colors.white,
+              style: AppTheme.headingS.copyWith(
+                color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
               ),
             ),
           ],

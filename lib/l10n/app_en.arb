@@ -12,5 +12,126 @@
   "storeScreenTitle": "Store",
   "playAgainButtonChooser": "Play Again",
   "tryAgainButtonChooser": "Try Again",
-  "getButtonLabel": "Get"
+  "getButtonLabel": "Get",
+  "noDareFound": "No dare found! Play nice.",
+  "playerChosen": "You've been chosen!",
+  "yourDare": "Your Dare",
+  "playAgainNextRound": "Next Round",
+  "dareIntensityMild": "Mild",
+  "dareIntensitySpicy": "Spicy",
+  "dareIntensityWild": "Wild",
+  "language": "Language",
+  "sound": "Sound",
+  "vibration": "Vibration",
+  "about": "About",
+  "appVersion": "Version {version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsTitle": "Settings",
+  "english": "English",
+  "arabic": "العربية",
+  "howManyPlayers": "How many players?",
+  "genderMix": "What's the gender mix?",
+  "boysOnly": "Boys Only",
+  "girlsOnly": "Girls Only",
+  "mixedGroup": "Mixed Group",
+  "relationship": "What's your relationship?",
+  "friends": "Friends",
+  "family": "Family",
+  "couple": "Couple",
+  "colleagues": "Colleagues",
+  "classmates": "Classmates",
+  "location": "Where are you?",
+  "home": "Home",
+  "college": "College",
+  "publicPlace": "Public",
+  "party": "Party",
+  "loseRule": "Who does the dare?",
+  "firstChosen": "First Chosen",
+  "lastRemaining": "Last Remaining",
+  "gameSummary": "Game Summary",
+  "players": "Players",
+  "startGame": "Start Game",
+  "next": "Next",
+  "back": "Back",
+  "step": "Step {current} of {total}",
+  "@step": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "partyPlay": "Party Play",
+  "quickPick": "Quick Pick",
+  "custom": "Custom",
+  "store": "Store",
+  "chooseYourMode": "Choose Your Mode",
+  "fingerSelectionAndDares": "Finger selection + Dares",
+  "fingersOnlyNoDares": "Fingers only, no dares",
+  "yourStats": "Your Stats",
+  "games": "Games",
+  "dares": "Dares",
+  "wins": "Wins",
+  "theUltimatePartyGame": "The Ultimate Party Game",
+  "skip": "Skip",
+  "letsGo": "Let's Go!",
+  "onboardingTitle1": "Place Your Fingers",
+  "onboardingSubtitle1": "Everyone puts a finger on the screen at the same time.",
+  "onboardingTitle2": "Hold Steady",
+  "onboardingSubtitle2": "Wait for the countdown. Don't lift your finger early!",
+  "onboardingTitle3": "The Chosen One",
+  "onboardingSubtitle3": "One finger gets selected — and they have to do the dare!",
+  "placeMoreFingers": "Place {count} more finger(s)",
+  "@placeMoreFingers": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "readyTapToStart": "Ready! Tap to start",
+  "holdSteady": "Hold steady...",
+  "winnerSelected": "Winner Selected!",
+  "lastOneStanding": "Last One Standing!",
+  "playerLastRemaining": "You're the last one!",
+  "falseStartMessage": "False Start! Keep fingers down",
+  "choosingIn": "Choosing in: {seconds}",
+  "@choosingIn": {
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+  "cancel": "Cancel",
+  "unlockNow": "Unlock Now",
+  "unlockPack": "Unlock Pack",
+  "playWithPack": "Play with this Pack",
+  "dareStore": "Dare Store",
+  "unlockPremiumDarePacks": "Unlock premium dare packs",
+  "betaFreeUnlock": "Beta Testing: All packs are FREE to unlock!",
+  "beta": "BETA",
+  "packUnlocked": "{name} unlocked!",
+  "@packUnlocked": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "yourPacks": "Your Packs ({count})",
+  "@yourPacks": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "availablePacks": "Available Packs ({count})",
+  "@availablePacks": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "youHaveAllPacks": "You have all packs!",
+  "unlockPackConfirm": "Unlock {name}?",
+  "@unlockPackConfirm": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "daresCount": "{count} dares",
+  "@daresCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "watchAdToUnlock": "Watch a short ad to unlock this pack for free!",
+  "adNotReady": "Ad not available yet. Try again in a moment.",
+  "watchAd": "Watch Ad",
+  "privacyPolicy": "Privacy Policy",
+  "rateApp": "Rate This App"
 }

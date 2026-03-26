@@ -199,7 +199,6 @@ class _ChooserScreenState extends ConsumerState<ChooserScreen> with SingleTicker
         case GamePhase.falseStart:
           return "False Start! All fingers must stay. Try again.";
       }
-      return localizations.placeFingersPrompt; // Should ideally not be reached
     }
 
 

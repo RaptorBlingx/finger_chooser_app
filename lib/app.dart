@@ -2,10 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/locale_provider.dart';
 import 'features/home/presentation/screens/home_screen_premium.dart';
+import 'features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'core/theme/app_theme.dart'; 
 
+final _onboardingCompleteProvider = FutureProvider<bool>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('onboarding_complete') ?? false;
+});
 
 class FingerChooserApp extends ConsumerWidget {
   const FingerChooserApp({super.key});
@@ -26,6 +32,8 @@ class FingerChooserApp extends ConsumerWidget {
         );
     }
 
+    final onboardingDone = ref.watch(_onboardingCompleteProvider);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: locale,
@@ -35,7 +43,21 @@ class FingerChooserApp extends ConsumerWidget {
       theme: AppTheme.darkTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
-      home: const HomeScreenPremium(),
+      home: onboardingDone.when(
+        data: (done) => done
+            ? const HomeScreenPremium()
+            : OnboardingScreen(
+                onComplete: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('onboarding_complete', true);
+                  ref.invalidate(_onboardingCompleteProvider);
+                },
+              ),
+        loading: () => const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+        error: (_, __) => const HomeScreenPremium(),
+      ),
     );
   }
 }

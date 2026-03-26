@@ -3,20 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../models/dare_pack_model.dart';
+import '../../../../models/filter_criteria_model.dart';
 import '../../../../services/dare_pack_service.dart';
+import '../../../../services/admob_service.dart';
+import '../../../finger_chooser/presentation/screens/chooser_screen_ultra.dart';
 
-class StoreScreenPremium extends StatefulWidget {
+class StoreScreenPremium extends ConsumerStatefulWidget {
   const StoreScreenPremium({super.key});
 
   @override
-  State<StoreScreenPremium> createState() => _StoreScreenPremiumState();
+  ConsumerState<StoreScreenPremium> createState() => _StoreScreenPremiumState();
 }
 
-class _StoreScreenPremiumState extends State<StoreScreenPremium> {
+class _StoreScreenPremiumState extends ConsumerState<StoreScreenPremium> {
   final DarePackService _packService = DarePackService();
   List<DarePack> _unlockedPacks = [];
   List<DarePack> _lockedPacks = [];
@@ -26,6 +30,10 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
   void initState() {
     super.initState();
     _loadPacks();
+    // Pre-load a rewarded ad for pack unlocks
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adMobServiceProvider).preloadRewarded();
+    });
   }
 
   Future<void> _loadPacks() async {
@@ -41,8 +49,38 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
     });
   }
 
+  void _playWithPack(DarePack pack) {
+    HapticFeedback.mediumImpact();
+    final intensities = pack.category == 'all'
+        ? null
+        : [pack.category];
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => ChooserScreenUltra(
+          filterCriteria: FilterCriteria(intensities: intensities),
+        ),
+        transitionsBuilder: (_, animation, __, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.9, end: 1.0).animate(
+                CurvedAnimation(parent: animation, curve: Curves.easeOut),
+              ),
+              child: child,
+            ),
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
+  }
+
   Future<void> _handleUnlockPack(DarePack pack) async {
-    // Show confirmation dialog
+    final l10n = AppLocalizations.of(context)!;
+    final adService = ref.read(adMobServiceProvider);
+
+    // Show confirmation dialog with watch-ad option
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -51,7 +89,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
           borderRadius: BorderRadius.circular(AppTheme.radiusL),
         ),
         title: Text(
-          'Unlock ${pack.name}?',
+          l10n.unlockPackConfirm(pack.name),
           style: AppTheme.headingS,
         ),
         content: Column(
@@ -74,7 +112,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
                 ),
                 const SizedBox(width: AppTheme.spacingS),
                 Text(
-                  '${pack.dareCount} dares',
+                  l10n.daresCount(pack.dareCount),
                   style: AppTheme.bodyS,
                 ),
               ],
@@ -88,11 +126,13 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.info_outline, color: Colors.white),
+                  const Icon(Icons.play_circle_fill, color: Colors.white),
                   const SizedBox(width: AppTheme.spacingS),
                   Expanded(
                     child: Text(
-                      'Beta Testing: All packs are FREE to unlock!',
+                      adService.isRewardedAdReady
+                          ? l10n.watchAdToUnlock
+                          : l10n.adNotReady,
                       style: AppTheme.bodyS.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -108,72 +148,76 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text(
-              'Cancel',
+              l10n.cancel,
               style: AppTheme.bodyM.copyWith(
                 color: AppTheme.textSecondary,
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
+          ElevatedButton.icon(
+            onPressed: adService.isRewardedAdReady
+                ? () => Navigator.pop(context, true)
+                : null,
+            icon: const Icon(Icons.play_circle_fill, size: 18),
+            label: Text(l10n.watchAd),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primaryStart,
               foregroundColor: Colors.white,
+              disabledBackgroundColor: Colors.grey.shade700,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppTheme.radiusM),
               ),
             ),
-            child: const Text('Unlock Now'),
           ),
         ],
       ),
     );
 
-    if (confirm == true) {
+    if (confirm == true && mounted) {
       HapticFeedback.mediumImpact();
 
-      // Show loading
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      adService.showRewardedAd(
+        onRewarded: () async {
+          // User watched the full ad — unlock the pack
+          await _packService.purchasePack(pack.id);
 
-      // Simulate purchase
-      await _packService.purchasePack(pack.id);
-      await Future.delayed(const Duration(seconds: 1));
-
-      if (mounted) {
-        Navigator.pop(context); // Close loading dialog
-
-        // Show success
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.check_circle, color: Colors.white),
-                const SizedBox(width: AppTheme.spacingM),
-                Expanded(
-                  child: Text(
-                    '${pack.name} unlocked! 🎉',
-                    style: AppTheme.bodyM,
-                  ),
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.check_circle, color: Colors.white),
+                    const SizedBox(width: AppTheme.spacingM),
+                    Expanded(
+                      child: Text(
+                        l10n.packUnlocked(pack.name),
+                        style: AppTheme.bodyM,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            backgroundColor: AppTheme.successStart,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppTheme.radiusM),
-            ),
-          ),
-        );
-
-        // Reload packs
-        await _loadPacks();
-      }
+                backgroundColor: AppTheme.successStart,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppTheme.radiusM),
+                ),
+              ),
+            );
+            await _loadPacks();
+          }
+        },
+        onFailedToShow: () {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.adNotReady),
+                backgroundColor: Colors.orange,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        },
+      );
     }
   }
 
@@ -223,7 +267,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
                         // Unlocked Packs
                         if (_unlockedPacks.isNotEmpty) ...[
                           Text(
-                            'Your Packs (${_unlockedPacks.length})',
+                            localizations.yourPacks(_unlockedPacks.length),
                             style: AppTheme.headingS.copyWith(
                               color: AppTheme.successStart,
                             ),
@@ -236,7 +280,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
                         // Locked Packs
                         if (_lockedPacks.isNotEmpty) ...[
                           Text(
-                            'Available Packs (${_lockedPacks.length})',
+                            localizations.availablePacks(_lockedPacks.length),
                             style: AppTheme.headingS.copyWith(
                               color: AppTheme.textSecondary,
                             ),
@@ -254,7 +298,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
                                 ),
                                 const SizedBox(height: AppTheme.spacingM),
                                 Text(
-                                  'You have all packs!',
+                                  localizations.youHaveAllPacks,
                                   style: AppTheme.headingM.copyWith(
                                     color: AppTheme.successStart,
                                   ),
@@ -275,6 +319,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
   }
 
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return GlassCard(
       child: Row(
         children: [
@@ -296,12 +341,12 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Dare Store',
+                  l10n.dareStore,
                   style: AppTheme.headingS,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Unlock premium dare packs',
+                  l10n.unlockPremiumDarePacks,
                   style: AppTheme.bodyS,
                 ),
               ],
@@ -330,7 +375,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  'BETA',
+                  l10n.beta,
                   style: AppTheme.caption.copyWith(
                     color: AppTheme.warning,
                     fontWeight: FontWeight.bold,
@@ -345,6 +390,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
   }
 
   Widget _buildPackCard(DarePack pack, {required bool isUnlocked}) {
+    final l10n = AppLocalizations.of(context)!;
     final gradient = _getGradientForCategory(pack.category);
     
     // Calculate animation delay based on the pack's position in the appropriate list
@@ -427,7 +473,7 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
               children: [
                 _buildStatChip(
                   Icons.casino,
-                  '${pack.dareCount} dares',
+                  l10n.daresCount(pack.dareCount),
                   AppTheme.info,
                 ),
                 const SizedBox(width: AppTheme.spacingS),
@@ -452,10 +498,19 @@ class _StoreScreenPremiumState extends State<StoreScreenPremium> {
             if (!isUnlocked) ...[
               const SizedBox(height: AppTheme.spacingM),
               GradientButton(
-                text: 'Unlock Pack',
+                text: l10n.unlockPack,
                 onPressed: () => _handleUnlockPack(pack),
                 gradient: gradient,
                 icon: Icons.lock_open,
+                height: 48,
+              ),
+            ] else ...[
+              const SizedBox(height: AppTheme.spacingM),
+              GradientButton(
+                text: l10n.playWithPack,
+                onPressed: () => _playWithPack(pack),
+                gradient: gradient,
+                icon: Icons.play_arrow,
                 height: 48,
               ),
             ],

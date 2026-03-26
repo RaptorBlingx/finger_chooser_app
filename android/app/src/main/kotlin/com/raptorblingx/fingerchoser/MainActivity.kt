@@ -1,4 +1,4 @@
-package com.example.finger_chooser_app
+package com.raptorblingx.fingerchoser
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../providers/game_setup_provider.dart';
 import '../widgets/step_indicator.dart';
-import '../widgets/player_count_selector.dart';
-import '../widgets/gender_selector.dart';
-import '../widgets/relationship_selector.dart';
-import '../widgets/location_selector.dart';
 import '../widgets/lose_rule_selector.dart';
 import '../../../../models/filter_criteria_model.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import '../../../finger_chooser/presentation/screens/chooser_screen_ultra.dart';
 
 class CustomPlayWizardScreen extends ConsumerWidget {
@@ -18,26 +18,20 @@ class CustomPlayWizardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(gameSetupProvider);
     final notifier = ref.read(gameSetupProvider.notifier);
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.purple.shade700,
-              Colors.deepPurple.shade900,
-              Colors.indigo.shade900,
-            ],
-          ),
+        decoration: const BoxDecoration(
+          gradient: AppTheme.backgroundGradient,
         ),
         child: SafeArea(
           child: Column(
             children: [
               // Header with step indicator
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(AppTheme.spacingM),
                 child: Column(
                   children: [
                     Row(
@@ -45,33 +39,44 @@ class CustomPlayWizardScreen extends ConsumerWidget {
                       children: [
                         if (state.currentStep > 0)
                           IconButton(
-                            onPressed: () => notifier.previousStep(),
-                            icon: const Icon(Icons.arrow_back,
-                                color: Colors.white),
+                            onPressed: () {
+                              HapticFeedback.selectionClick();
+                              notifier.previousStep();
+                            },
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.arrow_back,
+                                  color: Colors.white),
+                            ),
                           )
                         else
                           IconButton(
                             onPressed: () => Navigator.pop(context),
-                            icon:
-                                const Icon(Icons.close, color: Colors.white),
+                            icon: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.close,
+                                  color: Colors.white),
+                            ),
                           ),
                         Text(
-                          'Custom Game',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          localizations.custom,
+                          style: AppTheme.headingM,
                         ),
-                        const SizedBox(width: 48), // Balance the back button
+                        const SizedBox(width: 48),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppTheme.spacingM),
                     StepIndicator(
                       currentStep: state.currentStep,
-                      totalSteps: 5,
+                      totalSteps: 2,
                     ),
                   ],
                 ),
@@ -79,65 +84,62 @@ class CustomPlayWizardScreen extends ConsumerWidget {
 
               // Step content
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, animation) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(0.2, 0),
-                            end: Offset.zero,
-                          ).animate(animation),
-                          child: child,
+                child: AnimatedSwitcher(
+                  duration: AppDurations.normal,
+                  transitionBuilder: (child, animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0.2, 0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: state.currentStep == 0
+                      ? _buildConfigPage(
+                          key: const ValueKey('step0'),
+                          state: state,
+                          notifier: notifier,
+                          localizations: localizations,
+                        )
+                      : LoseRuleSelector(
+                          key: const ValueKey('step1'),
+                          selectedRule: state.loseRule,
+                          onRuleSelected: notifier.setLoseRule,
+                          onStartGame: () =>
+                              _startGame(context, state, notifier),
+                          playerCount: state.playerCount,
+                          genderMix: state.genderMix,
+                          relationship: state.relationship,
+                          location: state.location,
                         ),
-                      );
-                    },
-                    child: _buildStepContent(
-                      context,
-                      state,
-                      notifier,
-                    ),
-                  ),
                 ),
               ),
 
-              // Navigation buttons (except for last step)
-              if (state.currentStep < 4)
+              // Navigation button (only on step 0)
+              if (state.currentStep == 0)
                 Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _canProceedToNextStep(state)
-                          ? () => notifier.nextStep()
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.purple,
-                        disabledBackgroundColor: Colors.white.withOpacity(0.3),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'NEXT',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  padding: const EdgeInsets.all(AppTheme.spacingL),
+                  child: GradientButton(
+                    text: localizations.next,
+                    icon: Icons.arrow_forward,
+                    onPressed: state.canProceedToStep2
+                        ? () {
+                            HapticFeedback.selectionClick();
+                            notifier.nextStep();
+                          }
+                        : () {},
+                    gradient: state.canProceedToStep2
+                        ? AppTheme.primaryGradient
+                        : LinearGradient(
+                            colors: [
+                              AppTheme.cardBackground.withOpacity(0.5),
+                              AppTheme.cardBackgroundLight.withOpacity(0.5),
+                            ],
                           ),
-                          SizedBox(width: 8),
-                          Icon(Icons.arrow_forward),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
             ],
@@ -147,65 +149,92 @@ class CustomPlayWizardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStepContent(
-    BuildContext context,
-    GameSetupState state,
-    GameSetupNotifier notifier,
-  ) {
-    switch (state.currentStep) {
-      case 0:
-        return PlayerCountSelector(
-          key: const ValueKey('step0'),
-          selectedCount: state.playerCount,
-          onCountSelected: notifier.setPlayerCount,
-        );
-      case 1:
-        return GenderSelector(
-          key: const ValueKey('step1'),
-          selectedGender: state.genderMix,
-          onGenderSelected: notifier.setGenderMix,
-        );
-      case 2:
-        return RelationshipSelector(
-          key: const ValueKey('step2'),
-          selectedRelationship: state.relationship,
-          onRelationshipSelected: notifier.setRelationship,
-        );
-      case 3:
-        return LocationSelector(
-          key: const ValueKey('step3'),
-          selectedLocation: state.location,
-          onLocationSelected: notifier.setLocation,
-        );
-      case 4:
-        return LoseRuleSelector(
-          key: const ValueKey('step4'),
-          selectedRule: state.loseRule,
-          onRuleSelected: notifier.setLoseRule,
-          onStartGame: () => _startGame(context, state, notifier),
-          playerCount: state.playerCount,
-          genderMix: state.genderMix,
-          relationship: state.relationship,
-          location: state.location,
-        );
-      default:
-        return const SizedBox.shrink();
-    }
-  }
+  /// All-in-one config page: player count, gender, relationship, location
+  Widget _buildConfigPage({
+    Key? key,
+    required GameSetupState state,
+    required GameSetupNotifier notifier,
+    required AppLocalizations localizations,
+  }) {
+    return SingleChildScrollView(
+      key: key,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacingL),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Player count section
+          _SectionHeader(
+            icon: Icons.people,
+            label: localizations.howManyPlayers,
+          ),
+          const SizedBox(height: AppTheme.spacingM),
+          _CompactPlayerCount(
+            selectedCount: state.playerCount,
+            onCountSelected: notifier.setPlayerCount,
+          ),
 
-  bool _canProceedToNextStep(GameSetupState state) {
-    switch (state.currentStep) {
-      case 0:
-        return state.canProceedToStep2;
-      case 1:
-        return state.canProceedToStep3;
-      case 2:
-        return state.canProceedToStep4;
-      case 3:
-        return state.canProceedToStep5;
-      default:
-        return false;
-    }
+          const SizedBox(height: AppTheme.spacingXL),
+
+          // Gender section
+          _SectionHeader(
+            icon: Icons.wc,
+            label: localizations.genderMix,
+          ),
+          const SizedBox(height: AppTheme.spacingM),
+          _CompactChipRow(
+            options: [
+              ('boys', localizations.boysOnly, Icons.male),
+              ('girls', localizations.girlsOnly, Icons.female),
+              ('mixed', localizations.mixedGroup, Icons.people),
+            ],
+            selected: state.genderMix,
+            onSelected: notifier.setGenderMix,
+          ),
+
+          const SizedBox(height: AppTheme.spacingXL),
+
+          // Relationship section
+          _SectionHeader(
+            icon: Icons.favorite,
+            label: localizations.relationship,
+          ),
+          const SizedBox(height: AppTheme.spacingM),
+          _CompactChipRow(
+            options: [
+              ('friends', '👥 ${localizations.friends}', null),
+              ('family', '👨‍👩‍👧‍👦 ${localizations.family}', null),
+              ('couple', '💑 ${localizations.couple}', null),
+              ('colleagues', '👔 ${localizations.colleagues}', null),
+              ('classmates', '🎓 ${localizations.classmates}', null),
+            ],
+            selected: state.relationship,
+            onSelected: notifier.setRelationship,
+          ),
+
+          const SizedBox(height: AppTheme.spacingXL),
+
+          // Location section
+          _SectionHeader(
+            icon: Icons.location_on,
+            label: localizations.location,
+          ),
+          const SizedBox(height: AppTheme.spacingM),
+          _CompactChipRow(
+            options: [
+              ('home', localizations.home, Icons.home_rounded),
+              ('college', localizations.college, Icons.school_rounded),
+              ('public', localizations.publicPlace, Icons.public_rounded),
+              ('party', localizations.party, Icons.celebration_rounded),
+            ],
+            selected: state.location,
+            onSelected: notifier.setLocation,
+          ),
+
+          const SizedBox(height: AppTheme.spacingL),
+        ],
+      ),
+    );
   }
 
   void _startGame(
@@ -235,11 +264,24 @@ class CustomPlayWizardScreen extends ConsumerWidget {
     // Navigate to game with criteria
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (context) => ChooserScreenUltra(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            ChooserScreenUltra(
           filterCriteria: criteria,
           loseRule: gameSetup.loseRule,
         ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutCubic;
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+        transitionDuration: AppDurations.normal,
       ),
     );
 
@@ -253,6 +295,152 @@ class CustomPlayWizardScreen extends ConsumerWidget {
       groupTypes: [gameSetup.relationship],
       places: [gameSetup.location],
       genders: [gameSetup.genderMix],
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _SectionHeader({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: AppTheme.primaryStart, size: 20),
+        const SizedBox(width: AppTheme.spacingS),
+        Text(label, style: AppTheme.headingS),
+      ],
+    );
+  }
+}
+
+class _CompactPlayerCount extends StatelessWidget {
+  final int? selectedCount;
+  final ValueChanged<int> onCountSelected;
+
+  const _CompactPlayerCount({
+    required this.selectedCount,
+    required this.onCountSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: AppTheme.spacingS,
+      runSpacing: AppTheme.spacingS,
+      children: List.generate(9, (index) {
+        final count = index + 2;
+        final isSelected = selectedCount == count;
+        return GestureDetector(
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onCountSelected(count);
+          },
+          child: AnimatedContainer(
+            duration: AppDurations.fast,
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              gradient: isSelected ? AppTheme.primaryGradient : null,
+              color: isSelected ? null : AppTheme.cardBackground.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(AppTheme.radiusM),
+              border: Border.all(
+                color: isSelected
+                    ? AppTheme.primaryStart
+                    : Colors.white.withOpacity(0.1),
+                width: isSelected ? 2 : 1,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                '$count',
+                style: AppTheme.headingS.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class _CompactChipRow extends StatelessWidget {
+  final List<(String value, String label, IconData? icon)> options;
+  final String? selected;
+  final ValueChanged<String> onSelected;
+
+  const _CompactChipRow({
+    required this.options,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: AppTheme.spacingS,
+      runSpacing: AppTheme.spacingS,
+      children: options.map((option) {
+        final (value, label, icon) = option;
+        final isSelected = selected == value;
+        return GestureDetector(
+          onTap: () {
+            HapticFeedback.selectionClick();
+            onSelected(value);
+          },
+          child: AnimatedContainer(
+            duration: AppDurations.fast,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTheme.spacingM,
+              vertical: AppTheme.spacingS + 4,
+            ),
+            decoration: BoxDecoration(
+              gradient: isSelected
+                  ? LinearGradient(
+                      colors: [
+                        AppTheme.primaryStart.withOpacity(0.3),
+                        AppTheme.primaryEnd.withOpacity(0.2),
+                      ],
+                    )
+                  : null,
+              color: isSelected ? null : AppTheme.cardBackground.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(AppTheme.radiusXL),
+              border: Border.all(
+                color: isSelected
+                    ? AppTheme.primaryStart.withOpacity(0.5)
+                    : Colors.white.withOpacity(0.1),
+                width: isSelected ? 2 : 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (icon != null) ...[
+                  Icon(
+                    icon,
+                    size: 18,
+                    color: isSelected ? AppTheme.primaryStart : AppTheme.textSecondary,
+                  ),
+                  const SizedBox(width: AppTheme.spacingXS),
+                ],
+                Text(
+                  label,
+                  style: AppTheme.bodyM.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

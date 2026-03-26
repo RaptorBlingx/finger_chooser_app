@@ -1,6 +1,7 @@
 // lib/features/home/presentation/screens/home_screen_premium.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -10,21 +11,23 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../finger_chooser/presentation/screens/chooser_screen_ultra.dart';
 import '../../../store/presentation/screens/store_screen_premium.dart';
 import '../../../custom_play/presentation/screens/custom_play_wizard_screen.dart';
+import '../../../settings/presentation/screens/settings_screen.dart';
 import '../../../../services/admob_service.dart';
+import '../../../../services/stats_service.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/glass_card.dart';
 
-class HomeScreenPremium extends StatefulWidget {
+class HomeScreenPremium extends ConsumerStatefulWidget {
   const HomeScreenPremium({super.key});
 
   static const String routeName = '/home';
 
   @override
-  State<HomeScreenPremium> createState() => _HomeScreenPremiumState();
+  ConsumerState<HomeScreenPremium> createState() => _HomeScreenPremiumState();
 }
 
-class _HomeScreenPremiumState extends State<HomeScreenPremium>
+class _HomeScreenPremiumState extends ConsumerState<HomeScreenPremium>
     with SingleTickerProviderStateMixin {
   final AudioPlayer _buttonClickPlayer = AudioPlayer();
   final AdMobService _adMobService = AdMobService();
@@ -70,7 +73,11 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
   }
 
   void _playButtonClickSound() {
-    _buttonClickPlayer.play(AssetSource('sounds/button_click.mp3'));
+    try {
+      _buttonClickPlayer.play(AssetSource('sounds/button_click.mp3'));
+    } catch (e) {
+      debugPrint('Sound playback error: $e');
+    }
   }
 
   void _handleNavigation(
@@ -142,8 +149,10 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
             ),
             tooltip: localizations.settings,
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Settings - Coming Soon!')),
+              _handleNavigation(
+                context,
+                const SettingsScreen(),
+                eventName: 'settings_opened',
               );
             },
           ),
@@ -246,7 +255,7 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
             Rect.fromLTWH(0, 0, bounds.width, bounds.height),
           ),
           child: Text(
-            'Finger Chooser',
+            localizations.appTitle,
             style: GoogleFonts.poppins(
               fontSize: 36,
               fontWeight: FontWeight.bold,
@@ -263,7 +272,7 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
 
         // Subtitle
         Text(
-          'The Ultimate Party Game',
+          localizations.theUltimatePartyGame,
           style: AppTheme.bodyM.copyWith(
             color: AppTheme.textSecondary,
           ),
@@ -278,7 +287,7 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Choose Your Mode',
+          localizations.chooseYourMode,
           style: AppTheme.headingS.copyWith(
             color: AppTheme.textSecondary,
           ),
@@ -288,8 +297,8 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
 
         // Party Play - Main mode
         _buildGameModeCard(
-          title: '🎉 Party Play',
-          subtitle: 'Finger selection + Dares',
+          title: '🎉 ${localizations.partyPlay}',
+          subtitle: localizations.fingerSelectionAndDares,
           gradient: AppTheme.primaryGradient,
           onTap: () => _handleNavigation(
             context,
@@ -304,8 +313,8 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
 
         // Quick Pick
         _buildGameModeCard(
-          title: '👆 Quick Pick',
-          subtitle: 'Fingers only, no dares',
+          title: '👆 ${localizations.quickPick}',
+          subtitle: localizations.fingersOnlyNoDares,
           gradient: AppTheme.secondaryGradient,
           onTap: () => _handleNavigation(
             context,
@@ -419,6 +428,10 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
   }
 
   Widget _buildStatsCard(AppLocalizations localizations) {
+    final games = ref.watch(gamesPlayedProvider);
+    final dares = ref.watch(daresCompletedProvider);
+    final rounds = ref.watch(roundsPlayedProvider);
+
     return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -432,7 +445,7 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
               ),
               const SizedBox(width: AppTheme.spacingS),
               Text(
-                'Your Stats',
+                localizations.yourStats,
                 style: AppTheme.headingS,
               ),
             ],
@@ -441,9 +454,9 @@ class _HomeScreenPremiumState extends State<HomeScreenPremium>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatItem('0', 'Games', Icons.gamepad_outlined),
-              _buildStatItem('0', 'Dares', Icons.task_alt_outlined),
-              _buildStatItem('0', 'Wins', Icons.emoji_events_outlined),
+              _buildStatItem('$games', localizations.games, Icons.gamepad_outlined),
+              _buildStatItem('$dares', localizations.dares, Icons.task_alt_outlined),
+              _buildStatItem('$rounds', localizations.wins, Icons.emoji_events_outlined),
             ],
           ),
         ],

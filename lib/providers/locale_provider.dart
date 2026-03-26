@@ -11,9 +11,13 @@ class LocaleNotifier extends StateNotifier<Locale?> {
     _loadLocale();
   }
 
-  final SharedPreferences _sharedPreferences;
+  /// Fallback constructor when SharedPreferences isn't loaded yet.
+  LocaleNotifier._uninitialized() : _sharedPreferences = null, super(null);
+
+  final SharedPreferences? _sharedPreferences;
 
   Future<void> _loadLocale() async {
+    if (_sharedPreferences == null) return;
     final String? languageCode = _sharedPreferences.getString(_prefLocaleKey);
     if (languageCode != null && languageCode.isNotEmpty) {
       state = Locale(languageCode);
@@ -25,7 +29,7 @@ class LocaleNotifier extends StateNotifier<Locale?> {
   }
 
   Future<void> setLocale(Locale locale) async {
-    await _sharedPreferences.setString(_prefLocaleKey, locale.languageCode);
+    await _sharedPreferences?.setString(_prefLocaleKey, locale.languageCode);
     state = locale;
   }
 }
@@ -39,21 +43,10 @@ final sharedPreferencesProvider = FutureProvider<SharedPreferences>((ref) async 
 // We use a FutureProvider that depends on SharedPreferences being ready
 final localeNotifierProvider = StateNotifierProvider<LocaleNotifier, Locale?>((ref) {
   final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
-  // Return a placeholder or loading state until SharedPreferences is ready
-  // For simplicity here, we'll throw if not ready, but in a real app, handle loading.
-  // A better approach might be to make LocaleNotifier handle async init or
-  // have the UI handle the loading state of SharedPreferences.
   if (sharedPreferencesAsyncValue.hasValue) {
     return LocaleNotifier(sharedPreferencesAsyncValue.value!);
   }
-  // This case should ideally be handled by showing a loading indicator in the UI
-  // until sharedPreferencesProvider resolves.
-  // For now, we'll just return a notifier with a dummy/uninitialized SharedPreferences instance,
-  // which isn't ideal. Or, we can make the initial state of LocaleNotifier handle this.
-  // Let's assume for now the app will wait for SharedPreferences.
-  // A better way:
-  // final SharedPreferences sharedPreferences = ref.watch(sharedPreferencesProvider).valueOrNull ?? (throw Exception("SP not loaded"));
-  // return LocaleNotifier(sharedPreferences);
-  // For now, let's keep it simple:
-  return LocaleNotifier(sharedPreferencesAsyncValue.asData!.value); // Will throw if not loaded, handle this in UI
+  // SharedPreferences not yet loaded — return a notifier that defaults to null locale
+  // (MaterialApp will use system locale). Once SP loads, the provider will rebuild.
+  return LocaleNotifier._uninitialized();
 });

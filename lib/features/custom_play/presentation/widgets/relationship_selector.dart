@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class RelationshipSelector extends StatelessWidget {
   final String? selectedRelationship;
@@ -12,53 +16,44 @@ class RelationshipSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final options = [
+      ('👥', l10n.friends, 'friends'),
+      ('👨‍👩‍👧‍👦', l10n.family, 'family'),
+      ('💑', l10n.couple, 'couple'),
+      ('👔', l10n.colleagues, 'colleagues'),
+      ('🎓', l10n.classmates, 'classmates'),
+    ];
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'What\'s your relationship?',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-        ),
-        const SizedBox(height: 32),
+          l10n.relationship,
+          style: AppTheme.headingL,
+          textAlign: TextAlign.center,
+        ).animate().fadeIn(duration: 400.ms),
+        const SizedBox(height: AppTheme.spacingXL),
         Wrap(
-          spacing: 12,
-          runSpacing: 12,
+          spacing: AppTheme.spacingM,
+          runSpacing: AppTheme.spacingM,
           alignment: WrapAlignment.center,
-          children: [
-            _RelationshipChip(
-              label: '👥 Friends',
-              value: 'friends',
-              isSelected: selectedRelationship == 'friends',
-              onTap: () => onRelationshipSelected('friends'),
-            ),
-            _RelationshipChip(
-              label: '👨‍👩‍👧‍👦 Family',
-              value: 'family',
-              isSelected: selectedRelationship == 'family',
-              onTap: () => onRelationshipSelected('family'),
-            ),
-            _RelationshipChip(
-              label: '💑 Couple',
-              value: 'couple',
-              isSelected: selectedRelationship == 'couple',
-              onTap: () => onRelationshipSelected('couple'),
-            ),
-            _RelationshipChip(
-              label: '👔 Colleagues',
-              value: 'colleagues',
-              isSelected: selectedRelationship == 'colleagues',
-              onTap: () => onRelationshipSelected('colleagues'),
-            ),
-            _RelationshipChip(
-              label: '🎓 Classmates',
-              value: 'classmates',
-              isSelected: selectedRelationship == 'classmates',
-              onTap: () => onRelationshipSelected('classmates'),
-            ),
-          ],
+          children: options.asMap().entries.map((entry) {
+            final (emoji, label, value) = entry.value;
+            final isSelected = selectedRelationship == value;
+            return _RelationshipChip(
+              label: '$emoji $label',
+              isSelected: isSelected,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                onRelationshipSelected(value);
+              },
+            ).animate().fadeIn(
+                  delay: Duration(milliseconds: 100 * entry.key),
+                  duration: 300.ms,
+                );
+          }).toList(),
         ),
       ],
     );
@@ -67,13 +62,11 @@ class RelationshipSelector extends StatelessWidget {
 
 class _RelationshipChip extends StatelessWidget {
   final String label;
-  final String value;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _RelationshipChip({
     required this.label,
-    required this.value,
     required this.isSelected,
     required this.onTap,
   });
@@ -83,22 +76,34 @@ class _RelationshipChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        duration: AppDurations.fast,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppTheme.spacingL,
+          vertical: AppTheme.spacingM,
+        ),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(24),
+          gradient: isSelected
+              ? LinearGradient(
+                  colors: [
+                    AppTheme.primaryStart.withOpacity(0.3),
+                    AppTheme.primaryEnd.withOpacity(0.2),
+                  ],
+                )
+              : null,
+          color: isSelected ? null : AppTheme.cardBackground.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(AppTheme.radiusXL),
           border: Border.all(
-            color: isSelected ? Colors.purple : Colors.white.withOpacity(0.3),
-            width: 2,
+            color: isSelected
+                ? AppTheme.primaryStart.withOpacity(0.5)
+                : Colors.white.withOpacity(0.1),
+            width: isSelected ? 2 : 1,
           ),
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: isSelected ? Colors.purple : Colors.white,
+          style: AppTheme.bodyL.copyWith(
+            fontWeight: FontWeight.w600,
+            color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
           ),
         ),
       ),

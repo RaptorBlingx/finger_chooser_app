@@ -1,318 +1,982 @@
 [
   {
-    "id": "mild_friends_home_001",
-    "text_en": "Do your best impression of a chicken for 30 seconds",
-    "text_ar": "قم بأفضل تقليد لدجاجة لمدة 30 ثانية",
-    "groupType": ["friends", "family"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "mild_friends_home_002",
-    "text_en": "Sing the chorus of your favorite song out loud",
-    "text_ar": "غنِّ المقطع المفضل من أغنيتك المفضلة بصوت عالٍ",
-    "groupType": ["friends", "family"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "mild_friends_home_003",
-    "text_en": "Do 15 jumping jacks right now",
-    "text_ar": "قم بعمل 15 قفزة الآن",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["home", "college", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "mild_friends_home_004",
-    "text_en": "Speak in a robot voice for the next 2 minutes",
-    "text_ar": "تحدث بصوت روبوت للدقيقتين القادمتين",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "college", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "mild_friends_home_005",
-    "text_en": "Dance with no music for 30 seconds",
-    "text_ar": "ارقص بدون موسيقى لمدة 30 ثانية",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "mild_family_home_001",
-    "text_en": "Act like your favorite animal for 1 minute",
-    "text_ar": "تصرف مثل حيوانك المفضل لمدة دقيقة",
-    "groupType": ["family", "friends"],
-    "place": ["home"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "mild_family_home_002",
-    "text_en": "Tell your funniest joke to the group",
-    "text_ar": "احكِ أطرف نكتة لديك للمجموعة",
-    "groupType": ["family", "friends"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "mild_family_home_003",
-    "text_en": "Do your best celebrity impression",
-    "text_ar": "قم بأفضل تقليد لمشهور",
-    "groupType": ["family", "friends"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "spicy_friends_home_001",
-    "text_en": "Let another player pick a silly filter and take a selfie, then post it",
-    "text_ar": "دع لاعباً آخر يختار فلتراً مضحكاً والتقط صورة سيلفي ثم انشرها",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "spicy_friends_home_002",
-    "text_en": "Speak in rhymes for the next 3 minutes",
-    "text_ar": "تكلم بالقوافي للدقائق الثلاث القادمة",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "spicy_friends_home_003",
-    "text_en": "Let the group give you a funny nickname for the rest of the game",
-    "text_ar": "دع المجموعة تعطيك لقباً مضحكاً لبقية اللعبة",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
+    "id": "spicy_001",
+    "text_en": "Look the person the group chooses in the eyes for 10 seconds, then honestly say the first thing that came to your mind when you first met them.",
+    "text_ar": "خل المجموعة يختارون لك واحد.. وعطه نظرة 10 ثواني وبعدها قل له بصراحة أول مرة شفته وش جا في بالك؟",
+    "groupType": [
+      "friends",
+      "classmates",
+      "colleagues"
+    ],
+    "place": [
+      "home",
+      "party",
+      "college"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "spicy",
     "minPlayers": 3,
     "maxPlayers": null
   },
   {
-    "id": "spicy_friends_home_004",
-    "text_en": "Wear your shirt backwards for the next 15 minutes",
-    "text_ar": "ارتدِ قميصك بالمقلوب للـ 15 دقيقة القادمة",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "spicy_friends_home_005",
-    "text_en": "Do 20 push-ups or tell an embarrassing story",
-    "text_ar": "قم بـ 20 تمرين ضغط أو احكِ قصة محرجة",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "spicy_friends_party_001",
-    "text_en": "Show everyone your most embarrassing photo from your phone",
-    "text_ar": "أرِ الجميع أكثر صورة محرجة في هاتفك",
-    "groupType": ["friends"],
-    "place": ["party", "home"],
-    "gender": ["mixed", "boys", "girls"],
+    "id": "spicy_002",
+    "text_en": "Be honest: Who in this group do you think reads people the best and is hard to fool?",
+    "text_ar": "قل بصراحة: مين أكثر واحد في الجلسة تحسه يقرا الناس صح ومو سهل ينضحك عليه؟",
+    "groupType": [
+      "friends",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party",
+      "any"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "spicy",
     "minPlayers": 3,
     "maxPlayers": null
   },
   {
-    "id": "spicy_friends_party_002",
-    "text_en": "Talk with a mouth full of water for 1 minute without spilling",
-    "text_ar": "تحدث وفمك ممتلئ بالماء لمدة دقيقة دون أن تسكب",
-    "groupType": ["friends", "classmates"],
-    "place": ["party", "home"],
-    "gender": ["mixed", "boys", "girls"],
+    "id": "spicy_003",
+    "text_en": "Mention someone in the group and tell them a trait you admire but have never told them.",
+    "text_ar": "منشن شخص بالاسم في الجلسة، وقل له صفة فيه تعجبك بس ما قد قلتها له.",
+    "groupType": [
+      "friends",
+      "family",
+      "colleagues"
+    ],
+    "place": [
+      "any"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "wild_friends_party_001",
-    "text_en": "Call a random contact and speak only in song lyrics until they hang up",
-    "text_ar": "اتصل بجهة اتصال عشوائية وتحدث فقط بكلمات أغنية حتى يغلق",
-    "groupType": ["friends"],
-    "place": ["party", "home"],
-    "gender": ["mixed", "boys", "girls"],
+    "id": "wild_001",
+    "text_en": "Without beating around the bush, what's the dumbest thing you did to get someone's attention and regretted it?",
+    "text_ar": "بدون ما تلف وتدور، وش أغبى حركة سويتها عشان تلفت انتباه أحد وندمت؟",
+    "groupType": [
+      "friends",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "wild",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "wild_friends_party_002",
-    "text_en": "Post a status: 'Just realized I've been living my life wrong this whole time' and keep it for 1 hour",
-    "text_ar": "انشر حالة: 'للتو أدركت أنني عشت حياتي بشكل خاطئ طوال هذا الوقت' واتركها لمدة ساعة",
-    "groupType": ["friends", "classmates"],
-    "place": ["party", "home", "college"],
-    "gender": ["mixed", "boys", "girls"],
+    "id": "wild_002",
+    "text_en": "If you were forced to cut everyone in this group out of your life except one person, who would you keep and why?",
+    "text_ar": "لو جبروك إنك تمسح كل اللي في الجلسة من حياتك وتخلي واحد بس.. مين بتخلي؟ وليش؟",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_004",
+    "text_en": "Tell us something people always assume about you, but it's completely untrue.",
+    "text_ar": "قل شي عنك الناس دايم تحسبه فيك.. وهو ما يمت لك بصلة.",
+    "groupType": [
+      "friends",
+      "classmates",
+      "family",
+      "colleagues"
+    ],
+    "place": [
+      "any"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "wild_003",
+    "text_en": "Open your phone and show us the very last thing you searched for on Safari/Chrome, whatever it is.",
+    "text_ar": "افتح جوالك، ورنا آخر شيء بحثت عنه في المتصفح أياً كان.",
+    "groupType": [
+      "friends",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "wild",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "wild_friends_party_003",
-    "text_en": "Let someone else write your next social media post",
-    "text_ar": "دع شخصاً آخر يكتب منشورك القادم على وسائل التواصل",
-    "groupType": ["friends"],
-    "place": ["party", "home"],
-    "gender": ["mixed", "boys", "girls"],
+    "id": "spicy_005",
+    "text_en": "Choose someone and tell them: 'Convince me in 20 seconds why I should trust you.'",
+    "text_ar": "اختر واحد وقول له: (أبيك تقنعني في 20 ثانية ليش المفروض أثق فيك؟).",
+    "groupType": [
+      "friends",
+      "colleagues"
+    ],
+    "place": [
+      "home",
+      "party",
+      "college"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "wild_004",
+    "text_en": "Confess: What is the one thing that annoys you in relationships but you're too shy to talk about?",
+    "text_ar": "اعترف لنا: وش أكثر شي تتنرفز منه في العلاقات بس تستحي تتكلم فيه؟",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "wild",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "boys_friends_001",
-    "text_en": "Do your best impression of a famous athlete",
-    "text_ar": "قم بأفضل تقليد لرياضي مشهور",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["boys", "mixed"],
-    "intensity": "mild",
-    "minPlayers": 2,
+    "id": "wild_005",
+    "text_en": "Let the group hold your phone for a minute to read the last received WhatsApp message (excluding groups).",
+    "text_ar": "خل المجموعة يمسكون جوالك لمدة دقيقة، ولهم الحق يقرون آخر رسالة في الواتس آب (بدون قروبات).",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
+    "minPlayers": 3,
     "maxPlayers": null
   },
   {
-    "id": "boys_friends_002",
-    "text_en": "Challenge another player to an arm wrestling match",
-    "text_ar": "تحدى لاعباً آخر في مصارعة الذراعين",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["boys", "mixed"],
+    "id": "spicy_006",
+    "text_en": "Pick someone in the session and respectfully confront them with the thing that provokes you most about them.",
+    "text_ar": "اختر واحد في الجلسة، وواجهه بـ (أكثر شي يستفزك فيه) بس جبهاله باحترام.",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "boys_friends_003",
-    "text_en": "Do 30 squats right now",
-    "text_ar": "قم بـ 30 تمرين قرفصاء الآن",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["boys", "mixed"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "girls_friends_001",
-    "text_en": "Show everyone your best dance move",
-    "text_ar": "أري الجميع أفضل حركة رقص لديك",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["girls", "mixed"],
+    "id": "mild_001",
+    "text_en": "Talk about a situation where you felt your pride was completely wiped on the floor.",
+    "text_ar": "تكلم عن موقف خلاك تحس إن الكبرياء حقك انمسح بالأرض.",
+    "groupType": [
+      "friends",
+      "family"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "mild",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "girls_friends_002",
-    "text_en": "Let someone else pick your outfit for tomorrow",
-    "text_ar": "دع شخصاً آخر يختار ملابسك لغداً",
-    "groupType": ["friends"],
-    "place": ["home", "party"],
-    "gender": ["girls", "mixed"],
+    "id": "spicy_007",
+    "text_en": "Who in the group do you feel wears a mask, and their real personality is much stronger than what they show us?",
+    "text_ar": "مين في الجلسة تحس إنه يلبس قناع، وشخصيته الحقيقية أقوى من اللي قاعد يورينا؟",
+    "groupType": [
+      "friends",
+      "colleagues",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party",
+      "college"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "wild_006",
+    "text_en": "Open the last chat with someone you had a crush on, and read out their last message.",
+    "text_ar": "افتح آخر محادثة مع شخص كنت معجب فيه، واقرأ لنا آخر جملة من عنده.",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_008",
+    "text_en": "Pick a player and tell them honestly and out loud: What is the thing that makes them stand out?",
+    "text_ar": "اختر لاعب.. وقول له بصراحة وبصوت عالي: وش الشي اللي يخليك ملفت للنظر؟",
+    "groupType": [
+      "friends",
+      "colleagues"
+    ],
+    "place": [
+      "home",
+      "party",
+      "public"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
     "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "girls_friends_003",
-    "text_en": "Share your most used emoji and explain why",
-    "text_ar": "شاركي إيموجي الأكثر استخداماً واشرحي السبب",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["girls", "mixed"],
-    "intensity": "mild",
+    "id": "wild_007",
+    "text_en": "Tell us: Who is the person in your life that you feel you haven't taken your right from verbally yet?",
+    "text_ar": "قلنا: من الشخص اللي في حياتك تحس إنك ما أخذت حقك منه في الكلام لحد الحين؟",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
     "id": "couple_001",
-    "text_en": "Give your partner a 30-second shoulder massage",
-    "text_ar": "امنح شريكك تدليكاً للكتف لمدة 30 ثانية",
-    "groupType": ["couple"],
-    "place": ["home", "party"],
-    "gender": ["mixed"],
-    "intensity": "mild",
+    "text_en": "Look at them without talking.. let them guess what you are thinking about right now.",
+    "text_ar": "طالع فيه، وما أبيك تتكلم.. خله هو يقول وش قاعد تفكر فيه الحين.",
+    "groupType": [
+      "couple"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed"
+    ],
+    "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": 2
   },
   {
     "id": "couple_002",
-    "text_en": "Share your favorite memory together",
-    "text_ar": "شاركا ذكراكما المفضلة معاً",
-    "groupType": ["couple"],
-    "place": ["home"],
-    "gender": ["mixed"],
-    "intensity": "mild",
+    "text_en": "Tell them the sentence you always want to say but hesitate at the last moment.",
+    "text_ar": "قل له الجملة اللي دايم ودك تقولها له بس تتردد في آخر لحظة.",
+    "groupType": [
+      "couple"
+    ],
+    "place": [
+      "home",
+      "any"
+    ],
+    "gender": [
+      "mixed"
+    ],
+    "intensity": "wild",
     "minPlayers": 2,
     "maxPlayers": 2
   },
   {
     "id": "couple_003",
-    "text_en": "Do a silly couple dance for 1 minute",
-    "text_ar": "ارقصا رقصة زوجين مضحكة لمدة دقيقة",
-    "groupType": ["couple"],
-    "place": ["home", "party"],
-    "gender": ["mixed"],
+    "text_en": "Without thinking, what spontaneous action do they do that makes you admire them more?",
+    "text_ar": "بدون ما تفكر، وش أكثر حركة أو تصرف عفوي يسويه شريكك ويخليك تنعجب فيه أكثر؟",
+    "groupType": [
+      "couple"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed"
+    ],
     "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": 2
   },
   {
     "id": "couple_004",
-    "text_en": "Take a cute selfie together and set it as your wallpaper for a day",
-    "text_ar": "التقطا صورة سيلفي لطيفة معاً واجعلاها خلفية لمدة يوم",
-    "groupType": ["couple"],
+    "text_en": "If you had to describe their impact on you in just two words, what would you say?",
+    "text_ar": "لو قلت لك توصف تأثيره عليك بكلمتين، وش بتقول؟",
+    "groupType": [
+      "couple"
+    ],
+    "place": [
+      "home",
+      "any"
+    ],
+    "gender": [
+      "mixed"
+    ],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "couple_005",
+    "text_en": "Get close and you are allowed to whisper one thing in their ear, and it must be accurate.",
+    "text_ar": "قرب منه ومسموح لك تهمس بإذنه بشيء واحد بس وتتراجع، ولازم تجيبه صح.",
+    "groupType": [
+      "couple"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed"
+    ],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "couple_006",
+    "text_en": "Confess: What was the very first thing that caught your attention about them, which remains your weak spot?",
+    "text_ar": "اعترف: وش أول شيء لفت انتباهك فيه، وما زال هو أضعف نقطة عندك؟",
+    "groupType": [
+      "couple"
+    ],
+    "place": [
+      "home",
+      "any"
+    ],
+    "gender": [
+      "mixed"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "mild_002",
+    "text_en": "Tell us about a time you tried to act cool but ruined it entirely.",
+    "text_ar": "علمنا عن موقف حاولت تسوي فيها ثقيل بس جبت العيد.",
+    "groupType": [
+      "friends",
+      "classmates",
+      "family"
+    ],
+    "place": [
+      "any"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_003",
+    "text_en": "What's the weirdest thing you do when you're alone?",
+    "text_ar": "وش أغرب حركة أو طبع تسويه إذا صرت لحالك بالبيت؟",
+    "groupType": [
+      "friends",
+      "family"
+    ],
+    "place": [
+      "any"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_009",
+    "text_en": "Admit it: When was the last time you felt jealous of someone here, even a little?",
+    "text_ar": "اعترف: متى آخر مرة حسيت بشوية غيرة من أحد موجود هنا، وليش؟",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_010",
+    "text_en": "Who in this session seems calm but definitely is dangerous if pushed?",
+    "text_ar": "مين بالجلسه تحسه رايق وهادي، بس واضح إنه خطير لو عصب؟",
+    "groupType": [
+      "friends",
+      "colleagues",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "wild_008",
+    "text_en": "Challenge someone to a staring contest. First to look away has to reveal a secret.",
+    "text_ar": "اختر واحد وتحداه بعيونه.. اللي يرمش أو يصد أول لازم يعترف بسر قدام الكل.",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_004",
+    "text_en": "Stand up and confidently introduce yourself as if you own the place.",
+    "text_ar": "وقف الحين.. وقدم نفسك لنا كأنك أهم شخص في المكان لمدة 15 ثانية.",
+    "groupType": [
+      "friends",
+      "family",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party",
+      "college"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_011",
+    "text_en": "Ask any player a bold personal question, they have the right to refuse only once.",
+    "text_ar": "اسأل أي لاعب سؤال شخصي جريء.. وله حق يرفض يجاوب مرة وحدة بس باللعبة.",
+    "groupType": [
+      "friends",
+      "colleagues"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "wild_009",
+    "text_en": "Who is the one person in your contacts that you'd call if you needed to hide a body?",
+    "text_ar": "مين الشخص الوحيد بجهات الاتصال اللي بتدق عليه لو جايب العيد ومحتاج أحد يفزع لك بدون أسئلة؟",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_012",
+    "text_en": "Name a trait that instantly makes you attracted to someone.",
+    "text_ar": "ايش الصفة اللي تخليك تنجذب للشخص من أول لقاء وبدون ما يحس؟",
+    "groupType": [
+      "friends",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_005",
+    "text_en": "What's the best compliment you've ever received and never forgot?",
+    "text_ar": "وش أقوى مدحة سمعتها في حياتك ولليوم محفورة بمخك؟",
+    "groupType": [
+      "friends",
+      "family",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "wild_010",
+    "text_en": "Tell us an unpopular opinion that would get you kicked out of the group chat.",
+    "text_ar": "عطنا رأي لك لو قلته بقروب الواتس حقكم ممكن يطردونك فوراً.",
+    "groupType": [
+      "friends",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_013",
+    "text_en": "Point to someone and describe them in three bold words.",
+    "text_ar": "أشر على شخص بالجلسة، واوصفه بـ ٣ كلمات جريئة تختصره تماماً.",
+    "groupType": [
+      "friends",
+      "colleagues"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "wild_011",
+    "text_en": "Tell us about a time you acted confidently but panicked inside.",
+    "text_ar": "قلنا موقف دخلت فيه بثقتك مليون، ومن داخلك كنت ترتجف وتصارع.",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "couple_007",
+    "text_en": "What is a side of me I hide from people but you see clearly?",
+    "text_ar": "وش الجانب اللي فيني دايم أخبيه عن الناس، بس أنت تشوفه بوضوح؟",
+    "groupType": [
+      "couple"
+    ],
+    "place": [
+      "home",
+      "any"
+    ],
+    "gender": [
+      "mixed"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "couple_008",
+    "text_en": "Finish the sentence: You are the most irresistible when...",
+    "text_ar": "كمل هالجملة: (أنت تصير نقطة ضعفي لما...).",
+    "groupType": [
+      "couple"
+    ],
+    "place": [
+      "home",
+      "any"
+    ],
+    "gender": [
+      "mixed"
+    ],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "mild_006",
+    "text_en": "Who has the best energy in the room right now?",
+    "text_ar": "سؤال للكل: مين أكثر واحد طاقته حلوة ومحلي الجلسة اليوم؟",
+    "groupType": [
+      "friends",
+      "family",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party",
+      "college"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "mild",
+    "minPlayers": 4,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_014",
+    "text_en": "Admit a secret tactic you use when you want someone to notice you.",
+    "text_ar": "اعترف بحركة سرية تسويها دايم إذا بغيت أحد ينتبه لك ويركز معك.",
+    "groupType": [
+      "friends",
+      "classmates"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "wild_012",
+    "text_en": "Call a random contact, say 'I know everything', and hang up immediately.",
+    "text_ar": "دق على أي أحد باللسته، قل له: (ترا عرفت كل شيء) وقفل بوجهه فورا.",
+    "groupType": [
+      "friends"
+    ],
+    "place": [
+      "home",
+      "party"
+    ],
+    "gender": [
+      "mixed",
+      "boys",
+      "girls"
+    ],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_007",
+    "text_en": "Do your best impression of someone in this group and let everyone guess who it is.",
+    "text_ar": "قلّد أحد من الموجودين وخلهم يحزرون مين.",
+    "groupType": ["friends", "family", "classmates"],
     "place": ["home", "party"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_008",
+    "text_en": "Tell the group the funniest thing that happened to you this week.",
+    "text_ar": "قل أطرف شي صار لك هالأسبوع.",
+    "groupType": ["friends", "family", "colleagues", "classmates"],
+    "place": ["home", "party", "college", "public"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_009",
+    "text_en": "Say something nice about each person in the group in 30 seconds.",
+    "text_ar": "قل شي حلو عن كل واحد في الجلسة خلال ٣٠ ثانية.",
+    "groupType": ["friends", "family", "colleagues"],
+    "place": ["home", "party", "any"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_010",
+    "text_en": "Show the group the last photo you took on your phone.",
+    "text_ar": "ورّ المجموعة آخر صورة عندك بجوالك.",
+    "groupType": ["friends", "classmates"],
+    "place": ["home", "party", "college"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_011",
+    "text_en": "Speak in an accent of your choice for the next 2 rounds.",
+    "text_ar": "تكلم بلهجة غريبة لمدة جولتين.",
+    "groupType": ["friends", "family", "classmates"],
+    "place": ["home", "party"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_012",
+    "text_en": "Name 5 things you're grateful for right now.",
+    "text_ar": "عدّ خمس أشياء أنت شاكر عليها الحين.",
+    "groupType": ["friends", "family"],
+    "place": ["home", "any"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_013",
+    "text_en": "Tell the group about a hidden talent you have.",
+    "text_ar": "قل للمجموعة عن موهبة مخفية عندك.",
+    "groupType": ["friends", "family", "colleagues", "classmates"],
+    "place": ["home", "party", "college", "public"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_014",
+    "text_en": "Let the person on your right give you a new hairstyle. Keep it for 3 rounds.",
+    "text_ar": "خل اللي على يمينك يسوي لك تسريحة جديدة وخلها ٣ جولات.",
+    "groupType": ["friends", "family"],
+    "place": ["home", "party"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_015",
+    "text_en": "Stand up and dance for 15 seconds without any music.",
+    "text_ar": "قوم وارقص ١٥ ثانية بدون أي موسيقى.",
+    "groupType": ["friends", "family", "classmates"],
+    "place": ["home", "party"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "couple_009",
+    "text_en": "Describe the moment you realized you had feelings for your partner.",
+    "text_ar": "وصف اللحظة اللي حسيت فيها إن عندك مشاعر لشريكك.",
+    "groupType": ["couple"],
+    "place": ["home", "any"],
     "gender": ["mixed"],
     "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": 2
   },
   {
-    "id": "couple_005",
-    "text_en": "Compliment your partner using only three words",
-    "text_ar": "امدح شريكك باستخدام ثلاث كلمات فقط",
+    "id": "couple_010",
+    "text_en": "What's one habit of your partner that secretly annoys you but you never mention?",
+    "text_ar": "وش العادة اللي عند شريكك تضايقك بس ما قد قلت له عنها؟",
     "groupType": ["couple"],
-    "place": ["home"],
+    "place": ["home", "any"],
+    "gender": ["mixed"],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "couple_011",
+    "text_en": "Give your partner 3 genuine compliments they haven't heard before.",
+    "text_ar": "عط شريكك ٣ مجاملات صادقة ما سمعها قبل.",
+    "groupType": ["couple"],
+    "place": ["home", "any"],
+    "gender": ["mixed"],
+    "intensity": "mild",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "couple_012",
+    "text_en": "Reenact how you two first met, but make it overly dramatic.",
+    "text_ar": "مثّل كيف تعرفتوا أول مرة بس بشكل درامي مبالغ فيه.",
+    "groupType": ["couple"],
+    "place": ["home", "party"],
+    "gender": ["mixed"],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "couple_013",
+    "text_en": "Write a short love note to your partner and read it out loud.",
+    "text_ar": "اكتب رسالة حب قصيرة لشريكك واقراها بصوت عالي.",
+    "groupType": ["couple"],
+    "place": ["home", "any"],
+    "gender": ["mixed"],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": 2
+  },
+  {
+    "id": "couple_014",
+    "text_en": "If your relationship was a movie, what would it be called?",
+    "text_ar": "لو علاقتكم فيلم، وش بيكون اسمه؟",
+    "groupType": ["couple"],
+    "place": ["home", "any"],
     "gender": ["mixed"],
     "intensity": "mild",
     "minPlayers": 2,
@@ -320,10 +984,10 @@
   },
   {
     "id": "colleagues_001",
-    "text_en": "Share the funniest thing that happened at work this week",
-    "text_ar": "شارك أطرف شيء حدث في العمل هذا الأسبوع",
+    "text_en": "Describe your Monday morning routine at work in the most dramatic way possible.",
+    "text_ar": "وصف روتينك يوم الأحد الصبح بالدوام بأدرامتكية ممكنة.",
     "groupType": ["colleagues"],
-    "place": ["public", "party"],
+    "place": ["party", "any"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "mild",
     "minPlayers": 2,
@@ -331,10 +995,10 @@
   },
   {
     "id": "colleagues_002",
-    "text_en": "Do your best impression of your boss (in a friendly way)",
-    "text_ar": "قم بأفضل تقليد لمديرك (بطريقة ودية)",
+    "text_en": "Who in this group would you trust to cover for you if you called in sick?",
+    "text_ar": "مين من الموجودين تثق فيه يغطيك لو غبت عن الدوام؟",
     "groupType": ["colleagues"],
-    "place": ["public", "party"],
+    "place": ["party", "any"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "spicy",
     "minPlayers": 3,
@@ -342,174 +1006,53 @@
   },
   {
     "id": "colleagues_003",
-    "text_en": "Share your dream job if money wasn't an issue",
-    "text_ar": "شارك وظيفة أحلامك لو لم تكن الأموال مشكلة",
-    "groupType": ["colleagues", "friends"],
-    "place": ["public", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "classmates_college_001",
-    "text_en": "Do a dramatic reading of the last text message you sent",
-    "text_ar": "اقرأ آخر رسالة نصية أرسلتها بطريقة درامية",
-    "groupType": ["classmates", "friends"],
-    "place": ["college", "party", "home"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "classmates_college_002",
-    "text_en": "Teach the group a random fact you learned in class recently",
-    "text_ar": "علِّم المجموعة حقيقة عشوائية تعلمتها في الصف مؤخراً",
-    "groupType": ["classmates"],
-    "place": ["college", "home"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "classmates_college_003",
-    "text_en": "Do your best impression of your favorite professor",
-    "text_ar": "قم بأفضل تقليد لأستاذك المفضل",
-    "groupType": ["classmates"],
-    "place": ["college", "party", "home"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "classmates_college_004",
-    "text_en": "Show everyone the weirdest photo in your camera roll",
-    "text_ar": "أرِ الجميع أغرب صورة في ألبوم صورك",
-    "groupType": ["classmates", "friends"],
-    "place": ["college", "party", "home"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "public_mild_001",
-    "text_en": "Compliment a stranger nearby",
-    "text_ar": "امدح شخصاً غريباً قريباً منك",
-    "groupType": ["friends", "classmates"],
-    "place": ["public"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "public_mild_002",
-    "text_en": "Ask a stranger what time it is in a funny accent",
-    "text_ar": "اسأل شخصاً غريباً عن الوقت بلهجة مضحكة",
-    "groupType": ["friends", "classmates"],
-    "place": ["public"],
+    "text_en": "Do your best impression of your boss or manager. No names needed!",
+    "text_ar": "قلّد مديرك بأحسن ما عندك. بدون ذكر أسماء!",
+    "groupType": ["colleagues"],
+    "place": ["party", "any"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "wild",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "any_location_001",
-    "text_en": "Share your most unpopular opinion",
-    "text_ar": "شارك رأيك الأكثر إثارة للجدل",
-    "groupType": ["friends", "classmates", "colleagues"],
-    "place": ["any"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 3,
-    "maxPlayers": null
-  },
-  {
-    "id": "any_location_002",
-    "text_en": "Show your best magic trick or funny talent",
-    "text_ar": "أظهر أفضل خدعة سحرية أو موهبة مضحكة لديك",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["any"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "any_location_003",
-    "text_en": "Tell everyone your secret talent",
-    "text_ar": "أخبر الجميع عن موهبتك السرية",
-    "groupType": ["friends", "family", "classmates", "colleagues"],
-    "place": ["any"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "any_location_004",
-    "text_en": "Describe your perfect day in exactly 10 words",
-    "text_ar": "صف يومك المثالي في 10 كلمات بالضبط",
-    "groupType": ["friends", "family", "classmates", "colleagues", "couple"],
-    "place": ["any"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "any_location_005",
-    "text_en": "Moonwalk across the room",
-    "text_ar": "امشِ القمر عبر الغرفة",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["any"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "party_wild_001",
-    "text_en": "Do the macarena dance for 1 minute",
-    "text_ar": "ارقص رقصة ماكارينا لمدة دقيقة",
-    "groupType": ["friends", "classmates"],
-    "place": ["party", "home"],
+    "id": "colleagues_004",
+    "text_en": "What's the most awkward thing that happened to you at work?",
+    "text_ar": "وش أكثر موقف محرج صار لك في الدوام؟",
+    "groupType": ["colleagues"],
+    "place": ["party", "any"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "party_wild_002",
-    "text_en": "Sing happy birthday to someone random in the group",
-    "text_ar": "غنِّ عيد ميلاد سعيد لشخص عشوائي في المجموعة",
-    "groupType": ["friends", "classmates"],
-    "place": ["party", "home"],
+    "id": "colleagues_005",
+    "text_en": "If you could swap jobs with anyone here for a day, who and why?",
+    "text_ar": "لو تقدر تبدّل شغلك مع أي أحد هنا ليوم واحد، مين ولِيش؟",
+    "groupType": ["colleagues"],
+    "place": ["party", "any"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "mild",
     "minPlayers": 3,
     "maxPlayers": null
   },
   {
-    "id": "party_wild_003",
-    "text_en": "Let someone tickle you for 30 seconds without laughing",
-    "text_ar": "دع شخصاً يدغدغك لمدة 30 ثانية دون أن تضحك",
-    "groupType": ["friends", "classmates"],
-    "place": ["party", "home"],
+    "id": "colleagues_006",
+    "text_en": "Confess: What's the longest you've ever procrastinated on a task at work?",
+    "text_ar": "اعترف: وش أطول مدة ماطلت فيها على شغلة بالدوام؟",
+    "groupType": ["colleagues"],
+    "place": ["party", "any"],
     "gender": ["mixed", "boys", "girls"],
-    "intensity": "wild",
+    "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "family_mild_001",
-    "text_en": "Share your favorite childhood memory",
-    "text_ar": "شارك ذكرى طفولتك المفضلة",
-    "groupType": ["family", "friends"],
+    "id": "family_001",
+    "text_en": "Tell the family a childhood memory that always makes you smile.",
+    "text_ar": "قل لأهلك ذكرى من الطفولة دايم تضحكك.",
+    "groupType": ["family"],
     "place": ["home"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "mild",
@@ -517,10 +1060,32 @@
     "maxPlayers": null
   },
   {
-    "id": "family_mild_002",
-    "text_en": "Pretend you're a news reporter and give a weather forecast",
-    "text_ar": "تظاهر بأنك مراسل أخبار وقدِّم نشرة جوية",
-    "groupType": ["family", "friends"],
+    "id": "family_002",
+    "text_en": "Who in the family are you most similar to and why?",
+    "text_ar": "مين من العائلة أكثر واحد تشبهه ولِيش؟",
+    "groupType": ["family"],
+    "place": ["home"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "mild",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "family_003",
+    "text_en": "Apologize to someone in the family for something small you never said sorry for.",
+    "text_ar": "اعتذر لأحد بالعائلة على شي بسيط ما قد اعتذرت عنه.",
+    "groupType": ["family"],
+    "place": ["home"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "family_004",
+    "text_en": "Share a family tradition you want to keep for the next generation.",
+    "text_ar": "شارك تقليد عائلي تبي تكمله للجيل الجاي.",
+    "groupType": ["family"],
     "place": ["home"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "mild",
@@ -528,207 +1093,53 @@
     "maxPlayers": null
   },
   {
-    "id": "family_mild_003",
-    "text_en": "Tell everyone what you wanted to be when you grew up",
-    "text_ar": "أخبر الجميع ماذا أردت أن تكون عندما تكبر",
-    "groupType": ["family", "friends"],
-    "place": ["home"],
+    "id": "spicy_015",
+    "text_en": "Tell the group about a lie you told that you never got caught for.",
+    "text_ar": "قل للمجموعة عن كذبة قلتها وما أحد اكتشفها.",
+    "groupType": ["friends", "classmates"],
+    "place": ["home", "party"],
     "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
+    "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "multiplayer_001",
-    "text_en": "Everyone must swap seats with someone else right now",
-    "text_ar": "يجب على الجميع تبديل المقاعد مع شخص آخر الآن",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 4,
-    "maxPlayers": null
-  },
-  {
-    "id": "multiplayer_002",
-    "text_en": "The group votes: Who's most likely to become famous?",
-    "text_ar": "تصويت المجموعة: من الأكثر احتمالاً أن يصبح مشهوراً؟",
+    "id": "spicy_016",
+    "text_en": "What's the most embarrassing song on your playlist? Play it for everyone.",
+    "text_ar": "وش أكثر أغنية محرجة في قائمتك؟ شغّلها لهم.",
     "groupType": ["friends", "classmates"],
     "place": ["home", "party", "college"],
     "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 4,
+    "intensity": "spicy",
+    "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "multiplayer_003",
-    "text_en": "Everyone must speak in questions for the next 2 minutes",
-    "text_ar": "يجب على الجميع التحدث بالأسئلة للدقيقتين القادمتين",
+    "id": "spicy_017",
+    "text_en": "Rate everyone in the group from 1-10 on how funny they are. Explain your ratings.",
+    "text_ar": "قيّم كل واحد بالجلسة من ١ لـ ١٠ على مدى ظرافته ووضّح ليش.",
     "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
+    "place": ["home", "party"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "spicy",
     "minPlayers": 3,
     "maxPlayers": null
   },
   {
-    "id": "creative_001",
-    "text_en": "Create a 10-second commercial about yourself",
-    "text_ar": "أنشئ إعلاناً تجارياً مدته 10 ثوانٍ عن نفسك",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "creative_002",
-    "text_en": "Make up a rap about the person to your left",
-    "text_ar": "ألِّف أغنية راب عن الشخص على يسارك",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 3,
-    "maxPlayers": null
-  },
-  {
-    "id": "creative_003",
-    "text_en": "Invent a new dance move and name it",
-    "text_ar": "اخترع حركة رقص جديدة وسمِّها",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "physical_boys_001",
-    "text_en": "Do a plank for 45 seconds",
-    "text_ar": "قم بتمرين البلانك لمدة 45 ثانية",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "college", "party"],
-    "gender": ["boys", "mixed"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "physical_boys_002",
-    "text_en": "Race someone to do 10 burpees",
-    "text_ar": "تسابق مع شخص للقيام بـ 10 تمارين بيربي",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "college"],
-    "gender": ["boys", "mixed"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "physical_mixed_001",
-    "text_en": "Do your best yoga pose for 30 seconds",
-    "text_ar": "قم بأفضل وضعية يوغا لديك لمدة 30 ثانية",
-    "groupType": ["friends", "classmates", "family"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "silly_001",
-    "text_en": "Act like you're underwater for 1 minute",
-    "text_ar": "تصرف وكأنك تحت الماء لمدة دقيقة",
+    "id": "wild_013",
+    "text_en": "Let the group pick a song and you have to sing it using only animal sounds.",
+    "text_ar": "خل المجموعة يختارون أغنية وأنت لازم تغنيها بأصوات حيوانات بس.",
     "groupType": ["friends", "family", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "silly_002",
-    "text_en": "Pretend you're a fashion model and walk the runway",
-    "text_ar": "تظاهر بأنك عارض أزياء وامشِ على المنصة",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "silly_003",
-    "text_en": "Speak like a pirate for the next 3 minutes",
-    "text_ar": "تحدث مثل قرصان للدقائق الثلاث القادمة",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "silly_004",
-    "text_en": "Balance a book on your head for 2 minutes",
-    "text_ar": "وازن كتاباً على رأسك لمدة دقيقتين",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["home", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "confession_001",
-    "text_en": "Share the last lie you told",
-    "text_ar": "شارك آخر كذبة قلتها",
-    "groupType": ["friends", "classmates"],
     "place": ["home", "party"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "wild",
-    "minPlayers": 3,
-    "maxPlayers": null
-  },
-  {
-    "id": "confession_002",
-    "text_en": "Tell everyone your most irrational fear",
-    "text_ar": "أخبر الجميع عن خوفك الأكثر غرابة",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "confession_003",
-    "text_en": "Share your weirdest habit",
-    "text_ar": "شارك عادتك الأكثر غرابة",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "tech_001",
-    "text_en": "Show everyone your most used app this week",
-    "text_ar": "أرِ الجميع التطبيق الأكثر استخداماً لديك هذا الأسبوع",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "tech_002",
-    "text_en": "Let someone send a message from your phone to any contact",
-    "text_ar": "دع شخصاً يرسل رسالة من هاتفك لأي جهة اتصال",
+    "id": "wild_014",
+    "text_en": "Go outside and shout 'I love my friends!' at the top of your lungs.",
+    "text_ar": "روح برّا واصرخ 'أحب أصدقائي!' بأعلى صوتك.",
     "groupType": ["friends"],
     "place": ["home", "party"],
     "gender": ["mixed", "boys", "girls"],
@@ -737,10 +1148,10 @@
     "maxPlayers": null
   },
   {
-    "id": "tech_003",
-    "text_en": "Show the group your search history from today",
-    "text_ar": "أرِ المجموعة سجل بحثك من اليوم",
-    "groupType": ["friends", "classmates"],
+    "id": "wild_015",
+    "text_en": "Swap phones with the person next to you for 2 minutes. They can browse anything!",
+    "text_ar": "بدّل جوالك مع اللي جنبك لمدة دقيقتين. يقدر يتصفح أي شي!",
+    "groupType": ["friends"],
     "place": ["home", "party"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "wild",
@@ -748,189 +1159,101 @@
     "maxPlayers": null
   },
   {
-    "id": "food_001",
-    "text_en": "Describe your last meal as dramatically as possible",
-    "text_ar": "صف آخر وجبة تناولتها بطريقة درامية قدر الإمكان",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "food_002",
-    "text_en": "Name 5 pizza toppings in 5 seconds or do 10 jumping jacks",
-    "text_ar": "سمِّ 5 إضافات بيتزا في 5 ثوانٍ أو قم بـ 10 قفزات",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "speed_001",
-    "text_en": "Say the alphabet backwards in under 15 seconds",
-    "text_ar": "قل الأبجدية بالعكس في أقل من 15 ثانية",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "speed_002",
-    "text_en": "Name 10 countries in 10 seconds",
-    "text_ar": "سمِّ 10 دول في 10 ثوانٍ",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "vote_001",
-    "text_en": "The group votes: Who has the best laugh?",
-    "text_ar": "تصويت المجموعة: من لديه أفضل ضحكة؟",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 4,
-    "maxPlayers": null
-  },
-  {
-    "id": "vote_002",
-    "text_en": "The group votes: Who's the best dancer?",
-    "text_ar": "تصويت المجموعة: من أفضل راقص؟",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 4,
-    "maxPlayers": null
-  },
-  {
-    "id": "memory_001",
-    "text_en": "Share your funniest school memory",
-    "text_ar": "شارك أطرف ذكرى مدرسية لديك",
-    "groupType": ["friends", "classmates", "family"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "memory_002",
-    "text_en": "Describe your first day at your current school/job",
-    "text_ar": "صف أول يوم لك في مدرستك/عملك الحالي",
-    "groupType": ["friends", "classmates", "colleagues"],
-    "place": ["home", "party", "college", "public"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "artistic_001",
-    "text_en": "Draw a portrait of someone in the group using only your non-dominant hand",
-    "text_ar": "ارسم صورة لشخص في المجموعة باستخدام يدك غير المهيمنة فقط",
-    "groupType": ["friends", "classmates", "family"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "artistic_002",
-    "text_en": "Hum a popular song and let others guess what it is",
-    "text_ar": "دندن أغنية شهيرة ودع الآخرين يخمنون ماهي",
-    "groupType": ["friends", "family", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 3,
-    "maxPlayers": null
-  },
-  {
-    "id": "challenge_001",
-    "text_en": "Keep a straight face while others try to make you laugh for 1 minute",
-    "text_ar": "حافظ على وجه جدي بينما يحاول الآخرون إضحاكك لمدة دقيقة",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "spicy",
-    "minPlayers": 3,
-    "maxPlayers": null
-  },
-  {
-    "id": "challenge_002",
-    "text_en": "Stare at someone without blinking until they look away",
-    "text_ar": "حدِّق في شخص دون رمش حتى ينظر بعيداً",
-    "groupType": ["friends", "classmates"],
-    "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 2,
-    "maxPlayers": null
-  },
-  {
-    "id": "social_001",
-    "text_en": "Give a compliment to everyone in the group",
-    "text_ar": "امدح كل شخص في المجموعة",
+    "id": "wild_016",
+    "text_en": "Act out a movie scene chosen by the group, using only household objects as props.",
+    "text_ar": "مثّل مشهد فيلم تختاره المجموعة باستخدام أغراض البيت بس.",
     "groupType": ["friends", "family"],
     "place": ["home", "party"],
     "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 3,
-    "maxPlayers": 8
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
   },
   {
-    "id": "social_002",
-    "text_en": "Share what you admire most about the person on your right",
-    "text_ar": "شارك ما تعجبك أكثر بشأن الشخص على يمينك",
-    "groupType": ["friends", "classmates", "colleagues"],
-    "place": ["home", "party", "college", "public"],
+    "id": "college_001",
+    "text_en": "What's the craziest excuse you've given a professor for a late assignment?",
+    "text_ar": "وش أجنّ عذر عطيته لدكتور عن تأخر تسليم واجب؟",
+    "groupType": ["classmates"],
+    "place": ["college", "party"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "spicy",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "college_002",
+    "text_en": "Rank the group by who you think studies the most vs. who shows up unprepared.",
+    "text_ar": "رتّب الموجودين من اللي يذاكر أكثر لـ اللي يجي بدون استعداد.",
+    "groupType": ["classmates"],
+    "place": ["college", "party"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "spicy",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "college_003",
+    "text_en": "Describe your dream job using only hand gestures. Group has to guess.",
+    "text_ar": "وصف وظيفة أحلامك بحركات اليد بس والبقية يحزرون.",
+    "groupType": ["classmates", "friends"],
+    "place": ["college", "party", "home"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "mild",
     "minPlayers": 3,
     "maxPlayers": null
   },
   {
-    "id": "quick_mild_001",
-    "text_en": "High five everyone in the room",
-    "text_ar": "صافح بالأعلى جميع من في الغرفة",
+    "id": "public_001",
+    "text_en": "Wave at a random stranger and say 'Long time no see!' with full confidence.",
+    "text_ar": "لوّح لأي شخص غريب وقل له 'من زمان ما شفتك!' بكل ثقة.",
+    "groupType": ["friends", "classmates"],
+    "place": ["public", "party"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "public_002",
+    "text_en": "Order something at a cafe using only song lyrics.",
+    "text_ar": "اطلب شي من كافيه باستخدام كلمات أغاني بس.",
+    "groupType": ["friends", "classmates"],
+    "place": ["public"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "wild",
+    "minPlayers": 2,
+    "maxPlayers": null
+  },
+  {
+    "id": "spicy_018",
+    "text_en": "If you could read one person's mind in this group right now, whose would it be?",
+    "text_ar": "لو تقدر تقرا أفكار شخص واحد بالجلسة الحين، مين بتختار؟",
+    "groupType": ["friends", "classmates", "colleagues"],
+    "place": ["home", "party", "any"],
+    "gender": ["mixed", "boys", "girls"],
+    "intensity": "spicy",
+    "minPlayers": 3,
+    "maxPlayers": null
+  },
+  {
+    "id": "mild_016",
+    "text_en": "Make up a short poem about the person sitting across from you.",
+    "text_ar": "ألّف قصيدة قصيرة عن الشخص اللي قدامك.",
     "groupType": ["friends", "family", "classmates"],
     "place": ["home", "party", "college"],
-    "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
-    "minPlayers": 3,
-    "maxPlayers": null
-  },
-  {
-    "id": "quick_mild_002",
-    "text_en": "Say something nice about yourself",
-    "text_ar": "قل شيئاً لطيفاً عن نفسك",
-    "groupType": ["friends", "family", "classmates", "colleagues"],
-    "place": ["any"],
     "gender": ["mixed", "boys", "girls"],
     "intensity": "mild",
     "minPlayers": 2,
     "maxPlayers": null
   },
   {
-    "id": "quick_mild_003",
-    "text_en": "Spin around 5 times then try to walk in a straight line",
-    "text_ar": "دُر حول نفسك 5 مرات ثم حاول المشي في خط مستقيم",
+    "id": "wild_017",
+    "text_en": "Let the group choose a famous person and you have to accept a fake phone call from them, acting it out in full character.",
+    "text_ar": "خل المجموعة يختارون شخصية مشهورة وأنت لازم تمثل إنك تكلمه بالتلفون وتتقمص الدور كامل.",
     "groupType": ["friends", "family", "classmates"],
     "place": ["home", "party"],
     "gender": ["mixed", "boys", "girls"],
-    "intensity": "mild",
+    "intensity": "wild",
     "minPlayers": 2,
     "maxPlayers": null
   }

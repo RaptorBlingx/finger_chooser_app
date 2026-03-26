@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../../../../core/theme/app_theme.dart';
 
 class PlayerCountSelector extends StatelessWidget {
   final int? selectedCount;
@@ -12,30 +16,36 @@ class PlayerCountSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'How many players?',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-        ),
-        const SizedBox(height: 32),
+          localizations.howManyPlayers,
+          style: AppTheme.headingL,
+          textAlign: TextAlign.center,
+        ).animate().fadeIn(duration: 400.ms),
+        const SizedBox(height: AppTheme.spacingXL),
         Wrap(
-          spacing: 16,
-          runSpacing: 16,
+          spacing: AppTheme.spacingM,
+          runSpacing: AppTheme.spacingM,
           alignment: WrapAlignment.center,
           children: List.generate(9, (index) {
-            final count = index + 2; // 2 to 10 players
+            final count = index + 2;
             final isSelected = selectedCount == count;
 
             return _PlayerCountButton(
               count: count,
               isSelected: isSelected,
-              onTap: () => onCountSelected(count),
-            );
+              onTap: () {
+                HapticFeedback.selectionClick();
+                onCountSelected(count);
+              },
+            ).animate().fadeIn(
+                  delay: Duration(milliseconds: 50 * index),
+                  duration: 300.ms,
+                );
           }),
         ),
       ],
@@ -59,24 +69,27 @@ class _PlayerCountButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: AppDurations.fast,
         width: 80,
         height: 80,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(16),
+          gradient: isSelected ? AppTheme.primaryGradient : null,
+          color: isSelected ? null : AppTheme.cardBackground.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(AppTheme.radiusL),
           border: Border.all(
-            color: isSelected ? Colors.purple : Colors.white.withOpacity(0.3),
-            width: 2,
+            color: isSelected
+                ? AppTheme.primaryStart
+                : Colors.white.withOpacity(0.1),
+            width: isSelected ? 2 : 1,
           ),
+          boxShadow: isSelected ? AppTheme.buttonShadow : null,
         ),
         child: Center(
           child: Text(
             '$count',
-            style: TextStyle(
-              fontSize: 32,
+            style: AppTheme.headingM.copyWith(
+              color: Colors.white,
               fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.purple : Colors.white,
             ),
           ),
         ),
